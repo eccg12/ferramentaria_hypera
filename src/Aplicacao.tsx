@@ -4,6 +4,7 @@ import { Marcador } from './componentes/Marcador'
 import { BotaoReiniciar } from './componentes/BotaoReiniciar'
 import { TituloTela } from './componentes/TituloTela'
 import { ProvedorApp } from './estado/contexto'
+import { BarraRoteiro } from './roteiro/BarraRoteiro'
 import { TelaGuardiao } from './telas/guardiao/TelaGuardiao'
 import { TelaVisao } from './telas/visao/TelaVisao'
 import { TelaCheckin } from './telas/checkin/TelaCheckin'
@@ -27,6 +28,12 @@ export function Aplicacao() {
   return (
     <ProvedorApp>
       <HashRouter>
+        {/*
+          A barra do roteiro fica fora das rotas e abaixo delas: o modo
+          apresentação acompanha a navegação sem cada tela precisar saber dele.
+        */}
+        <div className="flex h-full flex-col">
+        <div className="min-h-0 flex-1">
         <Routes>
           <Route path="/" element={<Navigate to="/guardiao" replace />} />
           <Route path="/guardiao" element={<TelaGuardiao />} />
@@ -53,6 +60,9 @@ export function Aplicacao() {
           />
           <Route path="*" element={<Navigate to="/guardiao" replace />} />
         </Routes>
+        </div>
+        <BarraRoteiro />
+        </div>
       </HashRouter>
     </ProvedorApp>
   )

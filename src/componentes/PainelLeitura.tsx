@@ -24,6 +24,8 @@ interface PropsBloco {
   oculto?: boolean
   semFio?: boolean
   className?: string
+  /** Âncora, para o roteiro guiado poder rolar até um bloco específico. */
+  id?: string
 }
 
 export function BlocoLeitura({
@@ -33,12 +35,13 @@ export function BlocoLeitura({
   oculto = false,
   semFio = false,
   className = '',
+  id,
 }: PropsBloco) {
   if (oculto) return null
   return (
     <>
       {!semFio && <Fio />}
-      <section className={`px-4 py-3 ${className}`}>
+      <section id={id} className={`px-4 py-3 ${className}`}>
         {(titulo || acessorio) && (
           <header className="mb-2 flex items-center justify-between gap-2">
             {titulo && <h3 className="rotulo">{titulo}</h3>}

@@ -216,7 +216,7 @@ export function PainelVisao({
           </BlocoLeitura>
 
           {/* 6. decisão */}
-          <BlocoLeitura titulo="Decisão" oculto={blocosRevelados < 5}>
+          <BlocoLeitura titulo="Decisão" oculto={blocosRevelados < 5} className="scroll-mt-4" id="bloco-decisao">
             <BlocoDecisao
               itemSerial={item.serial}
               medicaoId={medicao.id}

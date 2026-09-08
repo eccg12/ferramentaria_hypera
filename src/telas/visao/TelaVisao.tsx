@@ -58,8 +58,17 @@ export function TelaVisao() {
     if (painelDaRota && ['leitura', 'comparar', 'historico', 'fila'].includes(painelDaRota)) {
       setPainel(painelDaRota as Painel)
     }
-    // o passo 6 do roteiro pede a decisão, que vive no painel de leitura
-    if (painelDaRota === 'decisao') setPainel('leitura')
+    // o passo 6 do roteiro pede a decisão, que vive no fim do painel de leitura
+    if (painelDaRota === 'decisao') {
+      setPainel('leitura')
+      varredura.revelarSemAnimacao()
+      // deixa o bloco montar antes de rolar até ele
+      window.setTimeout(
+        () => document.getElementById('bloco-decisao')?.scrollIntoView({ block: 'center' }),
+        80,
+      )
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [painelDaRota])
 
   function alternarCamada(c: Camada) {
