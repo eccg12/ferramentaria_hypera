@@ -1,0 +1,29 @@
+/*
+ * FerraMon — tokens de cor e forma.
+ * Direção visual: bancada de metrologia. Fundo escuro porque a captura é feita
+ * com backlight; contraste alto porque a tela fica ao lado da máquina.
+ */
+
+:root {
+  --aco-900: #071723; /* fundo profundo */
+  --aco-800: #0d2334; /* superfície */
+  --aco-700: #16344a; /* superfície elevada, cabeçalhos de tabela */
+  --linha: #1f4460;   /* fios de 1px, divisores */
+  --texto: #eaf2f8;
+  --texto-2: #93afc4; /* rótulos, metadados */
+  --sinal: #3dd2e8;   /* interativo, foco, marca */
+
+  /* semântica — igual à legenda da imagem conceito. Cor é dado, não decoração. */
+  --condenar: #ef3b4e;    /* fora de condição */
+  --atencao: #f5a623;     /* acompanhar */
+  --tolerancia: #16d07e;  /* dentro da tolerância */
+  --dimensional: #35c6e0; /* medição dimensional */
+  --identidade: #2b5bd7;  /* identificação do item */
+
+  /* alturas fixas da casca, para as telas calcularem a própria área útil */
+  --altura-cabecalho: 56px;
+  --altura-rodape: 28px;
+  --largura-trilho: 72px;
+
+  color-scheme: dark;
+}

@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--aco-900);
+    color: var(--texto);
+    font-family: 'Montserrat', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Foco de teclado sempre visível: é critério de qualidade mínima. */
+  :focus-visible {
+    outline: 2px solid var(--sinal);
+    outline-offset: 2px;
+  }
+
+  /* A rolagem também é da bancada: discreta, sem cromo claro. */
+  * {
+    scrollbar-color: var(--linha) transparent;
+    scrollbar-width: thin;
+  }
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: var(--linha);
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@layer components {
+  /*
+   * Valores medidos, item seriais, OP e contagens de ciclos.
+   * Nunca para rótulo, título ou texto corrido: cotas precisam alinhar
+   * dígito com dígito como num laudo dimensional.
+   */
+  .mono {
+    font-family: 'IBM Plex Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Rótulo de metadado: caixa de frase, espaçado, secundário. */
+  .rotulo {
+    @apply text-2xs uppercase tracking-[0.08em] text-texto-2;
+  }
+}
