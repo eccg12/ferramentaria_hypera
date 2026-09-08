@@ -5,7 +5,8 @@
  */
 import { createContext, useCallback, useContext, useMemo, useReducer } from 'react'
 import type { ReactNode } from 'react'
-import { perfilPorId, roteiro } from '../dados/seletores'
+import { movimentacoesDoItem, perfilPorId, roteiro } from '../dados/seletores'
+import type { Movimentacao } from '../dados/tipos'
 import type { AcaoApp, DecisaoRegistrada, EstadoApp, TratativaRegistrada } from './tipos'
 
 const ESTADO_INICIAL: EstadoApp = {
@@ -98,6 +99,12 @@ interface ValorContexto {
   usuarioAtual: string
   decisaoDoItem: (serial: string) => DecisaoRegistrada | undefined
   tratativaDoDesvio: (desvioId: string) => TratativaRegistrada | undefined
+  /**
+   * Movimentações do seed somadas às registradas no check-in desta sessão,
+   * mais recente primeiro. É o que faz a demonstração parecer um sistema: o
+   * evento do celular do operador aparece na hora na ficha e no Guardião.
+   */
+  movimentacoesDe: (serial: string) => Movimentacao[]
 }
 
 const Contexto = createContext<ValorContexto | null>(null)
@@ -117,9 +124,18 @@ export function ProvedorApp({ children }: { children: ReactNode }) {
     [estado.tratativas],
   )
 
+  const movimentacoesDe = useCallback(
+    (serial: string) =>
+      [
+        ...estado.movimentacoesSessao.filter((m) => m.itemSerial === serial),
+        ...movimentacoesDoItem(serial),
+      ].sort((a, b) => b.data.localeCompare(a.data)),
+    [estado.movimentacoesSessao],
+  )
+
   const valor = useMemo(
-    () => ({ estado, despachar, usuarioAtual, decisaoDoItem, tratativaDoDesvio }),
-    [estado, usuarioAtual, decisaoDoItem, tratativaDoDesvio],
+    () => ({ estado, despachar, usuarioAtual, decisaoDoItem, tratativaDoDesvio, movimentacoesDe }),
+    [estado, usuarioAtual, decisaoDoItem, tratativaDoDesvio, movimentacoesDe],
   )
 
   return <Contexto.Provider value={valor}>{children}</Contexto.Provider>

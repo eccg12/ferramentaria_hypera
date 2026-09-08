@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { AlertOctagon, AlertTriangle, ChevronRight, Info, CheckCircle2 } from 'lucide-react'
+import { AlertOctagon, AlertTriangle, ChevronRight, Info, CheckCircle2, Smartphone } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { ChipFase } from '../../componentes/ChipFase'
 import { Botao } from '../../componentes/Botao'
@@ -76,6 +76,42 @@ export function FilaDesvios() {
         </p>
         <ChipFase fase="Fase 1" degrau={2} />
       </div>
+
+      {/*
+        Movimentações que o operador registrou no celular durante esta sessão.
+        Aparecem aqui na hora: é o encadeamento entre o check-in e o Guardião.
+      */}
+      {estado.movimentacoesSessao.length > 0 && (
+        <div className="mb-3 border border-sinal/40 bg-sinal/[0.06] px-3 py-2">
+          <div className="flex items-center gap-1.5">
+            <Smartphone size={13} className="text-sinal" aria-hidden />
+            <h2 className="text-2xs uppercase tracking-[0.06em] text-sinal">
+              Registrado no check-in agora · {estado.movimentacoesSessao.length}
+            </h2>
+          </div>
+          <ul className="mt-1.5 space-y-0.5">
+            {estado.movimentacoesSessao
+              .slice()
+              .reverse()
+              .map((m) => (
+                <li key={m.id} className="flex flex-wrap items-baseline gap-x-3 text-2xs">
+                  <Link
+                    to={`/guardiao/item/${m.itemSerial}`}
+                    className="mono text-sinal underline-offset-2 hover:underline"
+                  >
+                    {m.itemSerial}
+                  </Link>
+                  <span className="text-texto">{m.tipo}</span>
+                  <span className="mono text-texto-2">{m.op}</span>
+                  <span className="mono text-texto-2">{m.maquina}</span>
+                  <span className="text-texto-2">{m.operador}</span>
+                  {m.motivo && <span className="text-atencao">{m.motivo}</span>}
+                  <span className="mono ml-auto text-texto-2">{dataHora(m.data)}</span>
+                </li>
+              ))}
+          </ul>
+        </div>
+      )}
 
       {/* Um contador por tipo de desvio. */}
       <ul className="mb-4 grid grid-cols-2 gap-px bg-linha sm:grid-cols-3 lg:grid-cols-5">

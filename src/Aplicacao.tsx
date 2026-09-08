@@ -6,6 +6,7 @@ import { TituloTela } from './componentes/TituloTela'
 import { ProvedorApp } from './estado/contexto'
 import { TelaGuardiao } from './telas/guardiao/TelaGuardiao'
 import { TelaVisao } from './telas/visao/TelaVisao'
+import { TelaCheckin } from './telas/checkin/TelaCheckin'
 
 /*
  * HashRouter: a build precisa abrir por file:// e no GitHub Pages.
@@ -30,10 +31,7 @@ export function Aplicacao() {
           <Route path="/" element={<Navigate to="/guardiao" replace />} />
           <Route path="/guardiao" element={<TelaGuardiao />} />
           <Route path="/visao" element={<TelaVisao />} />
-          <Route
-            path="/checkin"
-            element={<TelaMarcador nome="Check-in / check-out" prompt="Prompt 7" />}
-          />
+          <Route path="/checkin" element={<TelaCheckin />} />
           <Route
             path="/tradeoff"
             element={
