@@ -56,7 +56,10 @@ export function PainelFila({ serialAtivo }: { serialAtivo: string }) {
         </ul>
       </BlocoLeitura>
 
-      <BlocoLeitura titulo="Prova de conceito nas outras áreas">
+      <BlocoLeitura
+        titulo="Prova de conceito nas outras áreas"
+        acessorio={<ChipFase fase="Fase 2" degrau={3} />}
+      >
         <p className="mb-2 text-2xs text-texto-2">
           O mesmo rig e o mesmo critério em compressão e manipulação. É o que mostra que a
           mecânica não é específica de embalagem.

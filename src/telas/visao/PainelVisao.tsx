@@ -90,7 +90,11 @@ export function PainelVisao({
           </BlocoLeitura>
 
           {/* 2. concordância com o painel de especialistas */}
-          <BlocoLeitura titulo="Concordância com o painel de especialistas" oculto={blocosRevelados < 2}>
+          <BlocoLeitura
+            titulo="Concordância com o painel de especialistas"
+            acessorio={<ChipFase fase="Fase 2" degrau={3} />}
+            oculto={blocosRevelados < 2}
+          >
             {medicao.concordanciaPainel !== null ? (
               <div className="flex items-baseline gap-2">
                 <span className="mono text-xl font-medium text-tolerancia">
@@ -108,6 +112,7 @@ export function PainelVisao({
           {/* 3. achados */}
           <BlocoLeitura
             titulo={`Achados · ${achadosVisiveis.length} de ${medicao.achados.length}`}
+            acessorio={<ChipFase fase="Fase 2" degrau={3} />}
             oculto={blocosRevelados < 2}
           >
             <ul className="space-y-1.5">
@@ -216,7 +221,13 @@ export function PainelVisao({
           </BlocoLeitura>
 
           {/* 6. decisão */}
-          <BlocoLeitura titulo="Decisão" oculto={blocosRevelados < 5} className="scroll-mt-4" id="bloco-decisao">
+          <BlocoLeitura
+            titulo="Decisão"
+            acessorio={<ChipFase fase="Fase 2" degrau={3} />}
+            oculto={blocosRevelados < 5}
+            className="scroll-mt-4"
+            id="bloco-decisao"
+          >
             <BlocoDecisao
               itemSerial={item.serial}
               medicaoId={medicao.id}

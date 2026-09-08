@@ -66,7 +66,7 @@ export function PainelComparar({
         </p>
       </BlocoLeitura>
 
-      <BlocoLeitura titulo="Os dois lados">
+      <BlocoLeitura titulo="Os dois lados" acessorio={<ChipFase fase="Fase 2" degrau={3} />}>
         <div className="grid grid-cols-2 gap-px bg-linha">
           {(
             [
@@ -99,7 +99,7 @@ export function PainelComparar({
         </div>
       </BlocoLeitura>
 
-      <BlocoLeitura titulo="Uma cota, dos dois lados">
+      <BlocoLeitura titulo="Uma cota, dos dois lados" acessorio={<ChipFase fase="Fase 2" degrau={3} />}>
         <select
           value={alvo}
           onChange={(e) => setAlvo(e.target.value)}

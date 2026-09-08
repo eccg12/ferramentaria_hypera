@@ -80,7 +80,10 @@ export function PainelRecebimento({
         </Botao>
       </BlocoLeitura>
 
-      <BlocoLeitura titulo="Comparação dimensional contra o desenho">
+      <BlocoLeitura
+        titulo="Comparação dimensional contra o desenho"
+        acessorio={<ChipFase fase="Fase 2" degrau={3} />}
+      >
         <LinhaDado rotulo="Cota controlada">
           <span className="mono text-texto">profundidade de cavidade</span>
         </LinhaDado>
@@ -120,7 +123,7 @@ export function PainelRecebimento({
         </p>
       </BlocoLeitura>
 
-      <BlocoLeitura titulo="Cotas com maior desvio">
+      <BlocoLeitura titulo="Cotas com maior desvio" acessorio={<ChipFase fase="Fase 2" degrau={3} />}>
         <ul className="space-y-0.5">
           {zero.cotas
             .slice()
@@ -155,7 +158,10 @@ export function PainelRecebimento({
         </p>
       </BlocoLeitura>
 
-      <BlocoLeitura titulo="Disposição do recebimento">
+      <BlocoLeitura
+        titulo="Disposição do recebimento"
+        acessorio={<ChipFase fase="Fase 2" degrau={3} />}
+      >
         {aceito ? (
           <div className="border border-linha bg-aco-800/60 p-2.5">
             <p className="text-xs font-semibold text-texto">

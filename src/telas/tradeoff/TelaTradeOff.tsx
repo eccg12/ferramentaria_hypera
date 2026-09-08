@@ -198,7 +198,10 @@ export function TelaTradeOff() {
               {/* 2 e 3. os dois lados e a recomendação */}
               <div className="flex flex-col bg-aco-800">
                 <section className="p-3">
-                  <h2 className="rotulo">Manter mais 100 mil golpes</h2>
+                  <div className="flex items-center justify-between gap-2">
+                    <h2 className="rotulo">Manter mais 100 mil golpes</h2>
+                    <ChipFase fase="Fase 3" degrau={3} />
+                  </div>
                   <p className="mono mt-1 text-2xl font-medium text-condenar">
                     {brl(tradeoff.custoManterProximos100k.valor)}
                   </p>
@@ -226,7 +229,10 @@ export function TelaTradeOff() {
                 <Fio />
 
                 <section className="p-3">
-                  <h2 className="rotulo">Repor agora</h2>
+                  <div className="flex items-center justify-between gap-2">
+                    <h2 className="rotulo">Repor agora</h2>
+                    <ChipFase fase="Fase 4" degrau={4} />
+                  </div>
                   <p className="mono mt-1 text-2xl font-medium text-dimensional">
                     {brl(tradeoff.custoRepor.valor)}
                   </p>
@@ -242,7 +248,10 @@ export function TelaTradeOff() {
                 <Fio />
 
                 <section className="p-3">
-                  <h2 className="rotulo">Recomendação do agente</h2>
+                  <div className="flex items-center justify-between gap-2">
+                    <h2 className="rotulo">Recomendação do agente</h2>
+                    <ChipFase fase="Fase 3" degrau={3} />
+                  </div>
                   <p className="mt-1 text-sm leading-snug text-texto">{tradeoff.recomendacao}</p>
 
                   {criada || jaTemFicha ? (

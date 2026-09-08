@@ -171,7 +171,11 @@ export function FichaItem() {
                 </Linha>
               </Bloco>
 
-              <Bloco titulo="Movimentação" Icone={ArrowRightLeft}>
+              <Bloco
+                titulo="Movimentação"
+                Icone={ArrowRightLeft}
+                chip={<ChipFase fase="Fase 1" degrau={2} />}
+              >
                 <Linha rotulo="Local atual">{rotulo(item.local)}</Linha>
                 <Linha rotulo="Máquina">
                   <span className="mono">{item.maquina}</span>
@@ -254,7 +258,7 @@ export function FichaItem() {
                 )}
               </Bloco>
 
-              <Bloco titulo="Eventos" Icone={Siren}>
+              <Bloco titulo="Eventos" Icone={Siren} chip={<ChipFase fase="Fase 1" degrau={2} />}>
                 {desvios.length === 0 ? (
                   <p className="py-1 text-2xs text-texto-2">Nenhum desvio aberto para este item.</p>
                 ) : (
@@ -296,9 +300,10 @@ export function FichaItem() {
 
             {/* linha do tempo unificada */}
             <div className="mt-4">
-              <h2 className="rotulo mb-1.5">
-                Linha do tempo · {linhaDoTempo.length} registros
-              </h2>
+              <div className="mb-1.5 flex items-center justify-between gap-2">
+                <h2 className="rotulo">Linha do tempo · {linhaDoTempo.length} registros</h2>
+                <ChipFase fase="Fase 1" degrau={2} />
+              </div>
               <div className="border border-linha bg-aco-800">
                 {linhaDoTempo.length === 0 && (
                   <p className="px-3 py-4 text-xs text-texto-2">

@@ -249,9 +249,12 @@ export function TelaValor() {
               <section className="bg-aco-800 p-3">
                 <header className="mb-2 flex items-center justify-between gap-2">
                   <h2 className="rotulo">Efeito contábil</h2>
-                  <span className="text-2xs uppercase tracking-[0.06em] text-texto-2">
-                    informativo
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xs uppercase tracking-[0.06em] text-texto-2">
+                      informativo
+                    </span>
+                    <ChipFase fase="Fase 1" degrau={2} />
+                  </div>
                 </header>
 
                 <div className="flex items-end gap-6">
