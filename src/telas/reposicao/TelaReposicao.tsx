@@ -25,7 +25,12 @@ import { useApp } from '../../estado/contexto'
  * usa uma rampa da própria cor de marca, e a leitura exata vem da legenda e
  * do tooltip.
  */
-const RAMPA_SERIE = ['rgb(61 210 232 / 0.92)', 'rgb(61 210 232 / 0.66)', 'rgb(61 210 232 / 0.42)', 'rgb(61 210 232 / 0.22)']
+const RAMPA_SERIE = [
+  'rgb(var(--sinal-rgb) / 0.92)',
+  'rgb(var(--sinal-rgb) / 0.66)',
+  'rgb(var(--sinal-rgb) / 0.42)',
+  'rgb(var(--sinal-rgb) / 0.22)',
+]
 
 const corDaSerie = (i: number) => RAMPA_SERIE[i % RAMPA_SERIE.length]
 

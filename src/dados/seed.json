@@ -6165,6 +6165,8 @@
     "efeitoContabil": {
       "piloto": 0.47,
       "parque": 2.1,
+      "vidaContabilAnos": 10,
+      "vidaRealAnos": 3,
       "nota": "Informativo — vida útil contábil de 10 anos contra vida real de ~3 (CPC 27 / IAS 16)."
     },
     "capturaPorFase": [

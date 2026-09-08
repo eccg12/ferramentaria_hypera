@@ -346,7 +346,13 @@ export interface BusinessCase {
   aviso: string
   alavancas: Alavanca[]
   totais: Record<Escopo, ValoresPorCenario>
-  efeitoContabil: { piloto: number; parque: number; nota: string }
+  efeitoContabil: {
+    piloto: number
+    parque: number
+    vidaContabilAnos: number
+    vidaRealAnos: number
+    nota: string
+  }
   capturaPorFase: { fase: string; acumulado: number; rotulo: string }[]
 }
 

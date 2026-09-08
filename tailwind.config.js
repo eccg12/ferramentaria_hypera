@@ -4,20 +4,21 @@ export default {
   theme: {
     extend: {
       colors: {
-        // superfícies e texto — a bancada de metrologia
-        'aco-900': 'var(--aco-900)',
-        'aco-800': 'var(--aco-800)',
-        'aco-700': 'var(--aco-700)',
-        linha: 'var(--linha)',
-        texto: 'var(--texto)',
-        'texto-2': 'var(--texto-2)',
-        sinal: 'var(--sinal)',
+        // Os canais separados são o que permite bg-sinal/70 e afins. Com
+        // 'var(--sinal)' cru o Tailwind descarta a opacidade sem avisar.
+        'aco-900': 'rgb(var(--aco-900-rgb) / <alpha-value>)',
+        'aco-800': 'rgb(var(--aco-800-rgb) / <alpha-value>)',
+        'aco-700': 'rgb(var(--aco-700-rgb) / <alpha-value>)',
+        linha: 'rgb(var(--linha-rgb) / <alpha-value>)',
+        texto: 'rgb(var(--texto-rgb) / <alpha-value>)',
+        'texto-2': 'rgb(var(--texto-2-rgb) / <alpha-value>)',
+        sinal: 'rgb(var(--sinal-rgb) / <alpha-value>)',
         // semântica — cor é dado, não decoração
-        condenar: 'var(--condenar)',
-        atencao: 'var(--atencao)',
-        tolerancia: 'var(--tolerancia)',
-        dimensional: 'var(--dimensional)',
-        identidade: 'var(--identidade)',
+        condenar: 'rgb(var(--condenar-rgb) / <alpha-value>)',
+        atencao: 'rgb(var(--atencao-rgb) / <alpha-value>)',
+        tolerancia: 'rgb(var(--tolerancia-rgb) / <alpha-value>)',
+        dimensional: 'rgb(var(--dimensional-rgb) / <alpha-value>)',
+        identidade: 'rgb(var(--identidade-rgb) / <alpha-value>)',
       },
       fontFamily: {
         sans: ['Montserrat', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],

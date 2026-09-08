@@ -11,6 +11,7 @@ import { TelaVisao } from './telas/visao/TelaVisao'
 import { TelaCheckin } from './telas/checkin/TelaCheckin'
 import { TelaTradeOff } from './telas/tradeoff/TelaTradeOff'
 import { TelaReposicao } from './telas/reposicao/TelaReposicao'
+import { TelaValor } from './telas/valor/TelaValor'
 
 /*
  * HashRouter: a build precisa abrir por file:// e no GitHub Pages.
@@ -45,7 +46,7 @@ export function Aplicacao() {
           <Route path="/checkin" element={<TelaCheckin />} />
           <Route path="/tradeoff" element={<TelaTradeOff />} />
           <Route path="/reposicao" element={<TelaReposicao />} />
-          <Route path="/valor" element={<TelaMarcador nome="Valor" prompt="Prompt 12" />} />
+          <Route path="/valor" element={<TelaValor />} />
           <Route
             path="/diagnostico"
             element={

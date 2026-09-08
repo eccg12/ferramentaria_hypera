@@ -2,23 +2,45 @@
  * FerraMon — tokens de cor e forma.
  * Direção visual: bancada de metrologia. Fundo escuro porque a captura é feita
  * com backlight; contraste alto porque a tela fica ao lado da máquina.
+ *
+ * Cada cor existe em duas formas:
+ *
+ *   --x-rgb  canais separados, que o Tailwind usa para aplicar opacidade
+ *            (bg-sinal/70 vira rgb(var(--sinal-rgb) / 0.7))
+ *   --x      a cor pronta, para SVG, estilo em linha e gradiente
+ *
+ * Sem os canais, o Tailwind descarta em silêncio toda classe com barra de
+ * opacidade sobre estas cores, e os fundos tingidos somem sem erro nenhum.
  */
 
 :root {
-  --aco-900: #071723; /* fundo profundo */
-  --aco-800: #0d2334; /* superfície */
-  --aco-700: #16344a; /* superfície elevada, cabeçalhos de tabela */
-  --linha: #1f4460;   /* fios de 1px, divisores */
-  --texto: #eaf2f8;
-  --texto-2: #93afc4; /* rótulos, metadados */
-  --sinal: #3dd2e8;   /* interativo, foco, marca */
+  --aco-900-rgb: 7 23 35; /* fundo profundo */
+  --aco-800-rgb: 13 35 52; /* superfície */
+  --aco-700-rgb: 22 52 74; /* superfície elevada, cabeçalhos de tabela */
+  --linha-rgb: 31 68 96; /* fios de 1px, divisores */
+  --texto-rgb: 234 242 248;
+  --texto-2-rgb: 147 175 196; /* rótulos, metadados */
+  --sinal-rgb: 61 210 232; /* interativo, foco, marca */
 
   /* semântica — igual à legenda da imagem conceito. Cor é dado, não decoração. */
-  --condenar: #ef3b4e;    /* fora de condição */
-  --atencao: #f5a623;     /* acompanhar */
-  --tolerancia: #16d07e;  /* dentro da tolerância */
-  --dimensional: #35c6e0; /* medição dimensional */
-  --identidade: #2b5bd7;  /* identificação do item */
+  --condenar-rgb: 239 59 78; /* fora de condição */
+  --atencao-rgb: 245 166 35; /* acompanhar */
+  --tolerancia-rgb: 22 208 126; /* dentro da tolerância */
+  --dimensional-rgb: 53 198 224; /* medição dimensional */
+  --identidade-rgb: 43 91 215; /* identificação do item */
+
+  --aco-900: rgb(var(--aco-900-rgb));
+  --aco-800: rgb(var(--aco-800-rgb));
+  --aco-700: rgb(var(--aco-700-rgb));
+  --linha: rgb(var(--linha-rgb));
+  --texto: rgb(var(--texto-rgb));
+  --texto-2: rgb(var(--texto-2-rgb));
+  --sinal: rgb(var(--sinal-rgb));
+  --condenar: rgb(var(--condenar-rgb));
+  --atencao: rgb(var(--atencao-rgb));
+  --tolerancia: rgb(var(--tolerancia-rgb));
+  --dimensional: rgb(var(--dimensional-rgb));
+  --identidade: rgb(var(--identidade-rgb));
 
   /* alturas fixas da casca, para as telas calcularem a própria área útil */
   --altura-cabecalho: 56px;

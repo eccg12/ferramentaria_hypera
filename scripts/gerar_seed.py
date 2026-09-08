@@ -550,6 +550,7 @@ businessCase = {
         "parque": {"conservador": 5.53, "base": 9.37, "otimista": 15.51},
     },
     "efeitoContabil": {"piloto": 0.47, "parque": 2.10,
+                       "vidaContabilAnos": 10, "vidaRealAnos": 3,
                        "nota": "Informativo — vida útil contábil de 10 anos contra vida real de ~3 (CPC 27 / IAS 16)."},
     "capturaPorFase": [
         {"fase": "Fase 1", "acumulado": 0.30, "rotulo": "Baseline auditado + pacote CAPEX fev/27"},
