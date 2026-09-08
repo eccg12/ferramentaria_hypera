@@ -101,6 +101,9 @@ export interface Geometria {
   imagem: string
   larguraPx: number
   alturaPx: number
+  /** Única escala planar do dataset: a régua e os comprimentos derivam daqui. */
+  larguraPecaMm: number
+  notaEscala: string
   nota: string
   cavidades: Cavidade[]
   serrilhas: Serrilha[]

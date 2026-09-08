@@ -57,10 +57,16 @@ geometria = {
     "imagem": "/assets/placa-FS-0192.jpg",
     "larguraPx": 2000,
     "alturaPx": 1132,
+    "larguraPecaMm": 140.0,
+    "notaEscala": "Largura útil da peça, em milímetros. É a única escala planar do dataset: a régua da bancada e o comprimento dos achados são derivados dela, para nenhum componente precisar inventar uma escala.",
     "nota": "Coordenadas normalizadas 0..1 sobre a imagem. Numeração das cavidades em ordem de leitura: 8 por linha, 4 linhas, de cima para baixo.",
     "cavidades": cavidades,
     "serrilhas": serrilhas,
 }
+
+# escala derivada, usada abaixo para posicionar achados com comprimento declarado
+MM_POR_X = 1.0 / geometria["larguraPecaMm"]  # 1 mm em fração da largura
+ASPECTO = geometria["larguraPx"] / geometria["alturaPx"]
 
 # ---------------------------------------------------------------- medições FS-0192
 SPEC_PROF = {"nominal": 4.30, "tol": 0.10, "unidade": "mm"}
@@ -135,6 +141,30 @@ prof_atual["C17"] = 4.28   # dentro — o contraponto verde
 prof_atual["C11"] = 4.21
 prof_atual["C24"] = 4.39
 
+def _ranhura_entre(id_a, id_b, comprimento_mm, espessura_mm, caimento_mm):
+    """Banda fina cruzando o centro de duas cavidades, com o comprimento declarado.
+
+    Devolve o polígono em coordenadas normalizadas, centrado no ponto médio das
+    duas cavidades. Assim o contorno desenhado, o alvo declarado e o
+    comprimento do detalhe contam a mesma coisa.
+    """
+    a = next(c for c in cavidades if c["id"] == id_a)
+    b = next(c for c in cavidades if c["id"] == id_b)
+    meio_x = (a["cx"] + b["cx"]) / 2
+    meio_y = (a["cy"] + b["cy"]) / 2
+    meia = comprimento_mm * MM_POR_X / 2
+    esp = espessura_mm * MM_POR_X * ASPECTO
+    cai = caimento_mm * MM_POR_X * ASPECTO
+    x0, x1 = meio_x - meia, meio_x + meia
+    y0 = meio_y + esp  # levemente abaixo do centro, para o sulco aparecer na bolha
+    return [
+        [round(x0, 4), round(y0 - esp / 2, 4)],
+        [round(x1, 4), round(y0 - esp / 2 + cai, 4)],
+        [round(x1, 4), round(y0 + esp / 2 + cai, 4)],
+        [round(x0, 4), round(y0 + esp / 2, 4)],
+    ]
+
+
 achados_atual = [
     {"id": "A1", "tipo": "desgaste_serrilha", "rotulo": "Serrilha de selagem — perda de altura de pico",
      "score": 0.93, "severidade": "condenar", "alvo": "SB1",
@@ -142,7 +172,7 @@ achados_atual = [
     {"id": "A2", "tipo": "ranhura", "rotulo": "Ranhura transversal — risco de vazamento",
      "score": 0.84, "severidade": "atencao", "alvo": "C11,C12",
      "detalhe": "comprimento 38 mm, cruza 2 cavidades",
-     "poligono": [[0.402, 0.372], [0.596, 0.398], [0.598, 0.418], [0.404, 0.392]]},
+     "poligono": _ranhura_entre("C11", "C12", comprimento_mm=38.0, espessura_mm=1.3, caimento_mm=1.0)},
     {"id": "A3", "tipo": "rebarba", "rotulo": "Borda de cavidade — rebarba",
      "score": 0.78, "severidade": "atencao", "alvo": "C20",
      "detalhe": "2 pontos de rebarba na borda"},
