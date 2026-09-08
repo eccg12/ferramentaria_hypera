@@ -6,6 +6,7 @@ import { TituloTela } from './componentes/TituloTela'
 import { ProvedorApp } from './estado/contexto'
 import { BarraRoteiro } from './roteiro/BarraRoteiro'
 import { TelaGuardiao } from './telas/guardiao/TelaGuardiao'
+import { FichaItem } from './telas/guardiao/FichaItem'
 import { TelaVisao } from './telas/visao/TelaVisao'
 import { TelaCheckin } from './telas/checkin/TelaCheckin'
 
@@ -37,6 +38,7 @@ export function Aplicacao() {
         <Routes>
           <Route path="/" element={<Navigate to="/guardiao" replace />} />
           <Route path="/guardiao" element={<TelaGuardiao />} />
+          <Route path="/guardiao/item/:serial" element={<FichaItem />} />
           <Route path="/visao" element={<TelaVisao />} />
           <Route path="/checkin" element={<TelaCheckin />} />
           <Route
