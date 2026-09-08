@@ -1,0 +1,6214 @@
+{
+  "meta": {
+    "produto": "FerraMon",
+    "subtitulo": "Ferramentaria Guiada por Dados",
+    "cliente": "Hypera Pharma · P-19 Anápolis · embalagem",
+    "parceria": "Monoda Consulting × Google Cloud",
+    "versao": "0.1.0",
+    "geradoEm": "2026-09-08",
+    "ambiente": "demonstrativo",
+    "aviso": "Ambiente demonstrativo. Dados, medições, scores e valores são fictícios e servem para demonstrar a mecânica da plataforma. Nenhum número aqui é medição real de ferramental da Hypera."
+  },
+  "agentes": [
+    {
+      "id": "guardiao",
+      "numero": 1,
+      "nome": "Guardião de Dados",
+      "fase": "Fase 1",
+      "degrau": 2,
+      "estado": "ativo",
+      "resumo": "Lê a base serializada e o check-in/check-out; aponta desvios, explica como tratar e a quem alertar.",
+      "stack": [
+        "BigQuery",
+        "ADK",
+        "Gemini (explicação)"
+      ]
+    },
+    {
+      "id": "visao",
+      "numero": 2,
+      "nome": "Agente de Visão",
+      "fase": "Fase 2",
+      "degrau": 3,
+      "estado": "ativo",
+      "resumo": "Classifica defeitos e mede cotas críticas no pré-setup e no recebimento; compara com a peça nova e com o histórico.",
+      "stack": [
+        "Vertex AI Vision",
+        "Visual Inspection AI",
+        "Cloud Storage"
+      ]
+    },
+    {
+      "id": "tradeoff",
+      "numero": 3,
+      "nome": "Trade-Off CAPEX × OPEX",
+      "fase": "Fase 3",
+      "degrau": 3,
+      "estado": "ativo",
+      "resumo": "Conecta condição, ciclos e perdas de OEE ao custo de manter contra o custo de repor.",
+      "stack": [
+        "BigQuery",
+        "Cortex Framework (SAP)",
+        "Agent Engine"
+      ]
+    },
+    {
+      "id": "reposicao",
+      "numero": 4,
+      "nome": "Reposição & Fornecedores",
+      "fase": "Fase 4",
+      "degrau": 4,
+      "estado": "ativo",
+      "resumo": "Fichas de aquisição, 3YP e comparação de durabilidade por fornecedor a partir do recebimento.",
+      "stack": [
+        "BigQuery",
+        "Looker",
+        "Gemini Enterprise"
+      ]
+    },
+    {
+      "id": "diagnostico",
+      "numero": 5,
+      "nome": "Diagnóstico de Máquina",
+      "fase": "Próxima onda",
+      "degrau": 4,
+      "estado": "bloqueado",
+      "resumo": "Desgaste assimétrico medido na ferramenta como sinal de empeno ou desalinhamento do equipamento.",
+      "stack": [
+        "Manufacturing Data Engine",
+        "Vertex AI"
+      ]
+    }
+  ],
+  "perfis": [
+    {
+      "id": "operador",
+      "nome": "Operador · separação",
+      "ve": [
+        "checkin",
+        "guardiao"
+      ],
+      "descricao": "Check-in e check-out, alerta de peça sem retorno, o que conferir antes do setup."
+    },
+    {
+      "id": "lider",
+      "nome": "Líder de ferramentaria",
+      "ve": [
+        "guardiao",
+        "visao",
+        "checkin"
+      ],
+      "descricao": "Fila de avaliação, resultado do agente de visão, dupla checagem digital, peças a reparar."
+    },
+    {
+      "id": "excelencia",
+      "nome": "Excelência Operacional",
+      "ve": [
+        "guardiao",
+        "visao",
+        "tradeoff",
+        "diagnostico"
+      ],
+      "descricao": "Índice de saúde do parque, desvios abertos, OEE por ferramenta, causa raiz de desgaste anormal."
+    },
+    {
+      "id": "controladoria",
+      "nome": "Controladoria e Diretoria",
+      "ve": [
+        "tradeoff",
+        "reposicao",
+        "valor"
+      ],
+      "descricao": "Trade-off consolidado, CAPEX com lastro em medição, 3YP e margem por SKU."
+    }
+  ],
+  "roteiro": [
+    {
+      "passo": 1,
+      "rota": "/guardiao",
+      "perfil": "lider",
+      "titulo": "O dia começa com desvios, não com relatório",
+      "fala": "Cinco desvios abertos na sub-área. O Guardião já sabe qual peça não voltou, qual trocou sem motivo e qual passou do limite de ciclos. Isso é Fase 1, com os dados que a Hypera já tem hoje."
+    },
+    {
+      "passo": 2,
+      "rota": "/checkin",
+      "perfil": "operador",
+      "titulo": "A rastreabilidade nasce no celular do operador",
+      "fala": "Check-out do kit com item serial, OP e máquina. Sem isso não existe contador de ciclos, e sem ciclos não existe trade-off nem predição."
+    },
+    {
+      "passo": 3,
+      "rota": "/visao?item=FS-0192",
+      "perfil": "lider",
+      "titulo": "A peça voltou e entrou na fila de avaliação",
+      "fala": "Placa de selagem FS-0192, máquina BL-04, formato Neosaldina. 812 mil golpes desde a última medição."
+    },
+    {
+      "passo": 4,
+      "rota": "/visao?item=FS-0192&acao=varrer",
+      "perfil": "lider",
+      "titulo": "O agente vê e mede",
+      "fala": "Classificação e metrologia são dois problemas diferentes. A cor vem da tolerância, não da opinião: a cavidade 06 está em 4,12 contra 4,30 ± 0,10."
+    },
+    {
+      "passo": 5,
+      "rota": "/visao?item=FS-0192&painel=historico",
+      "perfil": "lider",
+      "titulo": "Contra a peça nova e contra ela mesma",
+      "fala": "Quatro medições desde dezembro. A tendência é de 9% a cada 100 mil golpes. Isso é degrau 2 — extrapolação, não predição."
+    },
+    {
+      "passo": 6,
+      "rota": "/visao?item=FS-0192&painel=decisao",
+      "perfil": "lider",
+      "titulo": "Quem decide é o líder, e fica registrado",
+      "fala": "O sistema recomenda substituir antes do próximo setup. A disposição da peça é humana, com nome, hora e trilha — é o que sustenta o desenho de apoio à decisão."
+    },
+    {
+      "passo": 7,
+      "rota": "/tradeoff?item=FS-0192",
+      "perfil": "excelencia",
+      "titulo": "Quanto custa manter essa peça na máquina",
+      "fala": "Manter mais 100 mil golpes custa R$ 38 mil em velocidade, refugo e setup. Repor custa R$ 21 mil e seis semanas. O ponto ótimo é agora."
+    },
+    {
+      "passo": 8,
+      "rota": "/reposicao",
+      "perfil": "controladoria",
+      "titulo": "A decisão vira ficha, e a ficha vira 3YP",
+      "fala": "A peça entra na ficha de aquisição de 2027 com lastro em medição. E a comparação de fornecedores mostra por que a peça que 'entrou boa e veio ruim' não era acaso."
+    },
+    {
+      "passo": 9,
+      "rota": "/valor",
+      "perfil": "controladoria",
+      "titulo": "O que isso vale por ano",
+      "fala": "R$ 2,08 milhões no piloto, R$ 9,37 milhões no parque declarado, cenário base. Cada fase captura uma parte e é medida contra o baseline."
+    }
+  ],
+  "geometria": {
+    "imagem": "/assets/placa-FS-0192.jpg",
+    "larguraPx": 2000,
+    "alturaPx": 1132,
+    "nota": "Coordenadas normalizadas 0..1 sobre a imagem. Numeração das cavidades em ordem de leitura: 8 por linha, 4 linhas, de cima para baixo.",
+    "cavidades": [
+      {
+        "id": "C01",
+        "numero": 1,
+        "linha": 1,
+        "coluna": 1,
+        "cx": 0.0705,
+        "cy": 0.1495,
+        "r": 0.0375
+      },
+      {
+        "id": "C02",
+        "numero": 2,
+        "linha": 1,
+        "coluna": 2,
+        "cx": 0.1925,
+        "cy": 0.1495,
+        "r": 0.0375
+      },
+      {
+        "id": "C03",
+        "numero": 3,
+        "linha": 1,
+        "coluna": 3,
+        "cx": 0.3125,
+        "cy": 0.1495,
+        "r": 0.0375
+      },
+      {
+        "id": "C04",
+        "numero": 4,
+        "linha": 1,
+        "coluna": 4,
+        "cx": 0.4405,
+        "cy": 0.1495,
+        "r": 0.0375
+      },
+      {
+        "id": "C05",
+        "numero": 5,
+        "linha": 1,
+        "coluna": 5,
+        "cx": 0.562,
+        "cy": 0.1495,
+        "r": 0.0375
+      },
+      {
+        "id": "C06",
+        "numero": 6,
+        "linha": 1,
+        "coluna": 6,
+        "cx": 0.6885,
+        "cy": 0.1495,
+        "r": 0.0375
+      },
+      {
+        "id": "C07",
+        "numero": 7,
+        "linha": 1,
+        "coluna": 7,
+        "cx": 0.81,
+        "cy": 0.1495,
+        "r": 0.0375
+      },
+      {
+        "id": "C08",
+        "numero": 8,
+        "linha": 1,
+        "coluna": 8,
+        "cx": 0.9345,
+        "cy": 0.1495,
+        "r": 0.0375
+      },
+      {
+        "id": "C09",
+        "numero": 9,
+        "linha": 2,
+        "coluna": 1,
+        "cx": 0.0705,
+        "cy": 0.316,
+        "r": 0.0375
+      },
+      {
+        "id": "C10",
+        "numero": 10,
+        "linha": 2,
+        "coluna": 2,
+        "cx": 0.1925,
+        "cy": 0.316,
+        "r": 0.0375
+      },
+      {
+        "id": "C11",
+        "numero": 11,
+        "linha": 2,
+        "coluna": 3,
+        "cx": 0.3125,
+        "cy": 0.316,
+        "r": 0.0375
+      },
+      {
+        "id": "C12",
+        "numero": 12,
+        "linha": 2,
+        "coluna": 4,
+        "cx": 0.4405,
+        "cy": 0.316,
+        "r": 0.0375
+      },
+      {
+        "id": "C13",
+        "numero": 13,
+        "linha": 2,
+        "coluna": 5,
+        "cx": 0.562,
+        "cy": 0.316,
+        "r": 0.0375
+      },
+      {
+        "id": "C14",
+        "numero": 14,
+        "linha": 2,
+        "coluna": 6,
+        "cx": 0.6885,
+        "cy": 0.316,
+        "r": 0.0375
+      },
+      {
+        "id": "C15",
+        "numero": 15,
+        "linha": 2,
+        "coluna": 7,
+        "cx": 0.81,
+        "cy": 0.316,
+        "r": 0.0375
+      },
+      {
+        "id": "C16",
+        "numero": 16,
+        "linha": 2,
+        "coluna": 8,
+        "cx": 0.9345,
+        "cy": 0.316,
+        "r": 0.0375
+      },
+      {
+        "id": "C17",
+        "numero": 17,
+        "linha": 3,
+        "coluna": 1,
+        "cx": 0.0705,
+        "cy": 0.6535,
+        "r": 0.0375
+      },
+      {
+        "id": "C18",
+        "numero": 18,
+        "linha": 3,
+        "coluna": 2,
+        "cx": 0.1925,
+        "cy": 0.6535,
+        "r": 0.0375
+      },
+      {
+        "id": "C19",
+        "numero": 19,
+        "linha": 3,
+        "coluna": 3,
+        "cx": 0.3125,
+        "cy": 0.6535,
+        "r": 0.0375
+      },
+      {
+        "id": "C20",
+        "numero": 20,
+        "linha": 3,
+        "coluna": 4,
+        "cx": 0.4405,
+        "cy": 0.6535,
+        "r": 0.0375
+      },
+      {
+        "id": "C21",
+        "numero": 21,
+        "linha": 3,
+        "coluna": 5,
+        "cx": 0.562,
+        "cy": 0.6535,
+        "r": 0.0375
+      },
+      {
+        "id": "C22",
+        "numero": 22,
+        "linha": 3,
+        "coluna": 6,
+        "cx": 0.6885,
+        "cy": 0.6535,
+        "r": 0.0375
+      },
+      {
+        "id": "C23",
+        "numero": 23,
+        "linha": 3,
+        "coluna": 7,
+        "cx": 0.81,
+        "cy": 0.6535,
+        "r": 0.0375
+      },
+      {
+        "id": "C24",
+        "numero": 24,
+        "linha": 3,
+        "coluna": 8,
+        "cx": 0.9345,
+        "cy": 0.6535,
+        "r": 0.0375
+      },
+      {
+        "id": "C25",
+        "numero": 25,
+        "linha": 4,
+        "coluna": 1,
+        "cx": 0.0705,
+        "cy": 0.8345,
+        "r": 0.0375
+      },
+      {
+        "id": "C26",
+        "numero": 26,
+        "linha": 4,
+        "coluna": 2,
+        "cx": 0.1925,
+        "cy": 0.8345,
+        "r": 0.0375
+      },
+      {
+        "id": "C27",
+        "numero": 27,
+        "linha": 4,
+        "coluna": 3,
+        "cx": 0.3125,
+        "cy": 0.8345,
+        "r": 0.0375
+      },
+      {
+        "id": "C28",
+        "numero": 28,
+        "linha": 4,
+        "coluna": 4,
+        "cx": 0.4405,
+        "cy": 0.8345,
+        "r": 0.0375
+      },
+      {
+        "id": "C29",
+        "numero": 29,
+        "linha": 4,
+        "coluna": 5,
+        "cx": 0.562,
+        "cy": 0.8345,
+        "r": 0.0375
+      },
+      {
+        "id": "C30",
+        "numero": 30,
+        "linha": 4,
+        "coluna": 6,
+        "cx": 0.6885,
+        "cy": 0.8345,
+        "r": 0.0375
+      },
+      {
+        "id": "C31",
+        "numero": 31,
+        "linha": 4,
+        "coluna": 7,
+        "cx": 0.81,
+        "cy": 0.8345,
+        "r": 0.0375
+      },
+      {
+        "id": "C32",
+        "numero": 32,
+        "linha": 4,
+        "coluna": 8,
+        "cx": 0.9345,
+        "cy": 0.8345,
+        "r": 0.0375
+      }
+    ],
+    "serrilhas": [
+      {
+        "id": "SA1",
+        "banda": "A",
+        "tipo": "vedacao",
+        "cx": 0.137,
+        "cy": 0.04,
+        "w": 0.198,
+        "h": 0.04
+      },
+      {
+        "id": "SA2",
+        "banda": "A",
+        "tipo": "vedacao",
+        "cx": 0.38,
+        "cy": 0.04,
+        "w": 0.198,
+        "h": 0.04
+      },
+      {
+        "id": "SA3",
+        "banda": "A",
+        "tipo": "vedacao",
+        "cx": 0.624,
+        "cy": 0.04,
+        "w": 0.198,
+        "h": 0.04
+      },
+      {
+        "id": "SA4",
+        "banda": "A",
+        "tipo": "vedacao",
+        "cx": 0.869,
+        "cy": 0.04,
+        "w": 0.198,
+        "h": 0.04
+      },
+      {
+        "id": "SB1",
+        "banda": "B",
+        "tipo": "guia",
+        "cx": 0.137,
+        "cy": 0.442,
+        "w": 0.198,
+        "h": 0.04
+      },
+      {
+        "id": "SB2",
+        "banda": "B",
+        "tipo": "guia",
+        "cx": 0.38,
+        "cy": 0.442,
+        "w": 0.198,
+        "h": 0.04
+      },
+      {
+        "id": "SB3",
+        "banda": "B",
+        "tipo": "guia",
+        "cx": 0.624,
+        "cy": 0.442,
+        "w": 0.198,
+        "h": 0.04
+      },
+      {
+        "id": "SB4",
+        "banda": "B",
+        "tipo": "guia",
+        "cx": 0.869,
+        "cy": 0.442,
+        "w": 0.198,
+        "h": 0.04
+      },
+      {
+        "id": "SC1",
+        "banda": "C",
+        "tipo": "vedacao",
+        "cx": 0.137,
+        "cy": 0.531,
+        "w": 0.198,
+        "h": 0.04
+      },
+      {
+        "id": "SC2",
+        "banda": "C",
+        "tipo": "vedacao",
+        "cx": 0.38,
+        "cy": 0.531,
+        "w": 0.198,
+        "h": 0.04
+      },
+      {
+        "id": "SC3",
+        "banda": "C",
+        "tipo": "vedacao",
+        "cx": 0.624,
+        "cy": 0.531,
+        "w": 0.198,
+        "h": 0.04
+      },
+      {
+        "id": "SC4",
+        "banda": "C",
+        "tipo": "vedacao",
+        "cx": 0.869,
+        "cy": 0.531,
+        "w": 0.198,
+        "h": 0.04
+      },
+      {
+        "id": "SD1",
+        "banda": "D",
+        "tipo": "guia",
+        "cx": 0.137,
+        "cy": 0.943,
+        "w": 0.198,
+        "h": 0.04
+      },
+      {
+        "id": "SD2",
+        "banda": "D",
+        "tipo": "guia",
+        "cx": 0.38,
+        "cy": 0.943,
+        "w": 0.198,
+        "h": 0.04
+      },
+      {
+        "id": "SD3",
+        "banda": "D",
+        "tipo": "guia",
+        "cx": 0.624,
+        "cy": 0.943,
+        "w": 0.198,
+        "h": 0.04
+      },
+      {
+        "id": "SD4",
+        "banda": "D",
+        "tipo": "guia",
+        "cx": 0.869,
+        "cy": 0.943,
+        "w": 0.198,
+        "h": 0.04
+      }
+    ]
+  },
+  "specs": {
+    "profundidadeCavidade": {
+      "nominal": 4.3,
+      "tol": 0.1,
+      "unidade": "mm"
+    }
+  },
+  "itens": [
+    {
+      "serial": "FS-0192",
+      "familia": "PLACA_SELAGEM",
+      "familiaLabel": "Placa de selagem",
+      "area": "embalagem",
+      "subarea": "selagem",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-04",
+      "formato": "NEO-4x8",
+      "posicao": "SEL-A",
+      "kit": "KIT-NEO-4x8-BL-04",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2025-12-08",
+        "valor": 48200,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 812400,
+      "limiteCiclos": 950000,
+      "estado": "desgastado",
+      "local": "avaliacao",
+      "temMedicao": true,
+      "reservaSap": "RES-441907",
+      "poc": true,
+      "referenciaZero": {
+        "medicaoId": "MED-FS0192-000",
+        "escaneadaEm": "2025-12-12"
+      },
+      "destaque": true
+    },
+    {
+      "serial": "FF-0106",
+      "familia": "FORMA_TERMOFORMAGEM",
+      "familiaLabel": "Forma de termoformagem",
+      "area": "embalagem",
+      "subarea": "formacao",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-01",
+      "formato": "NEO-4x8",
+      "posicao": "FF-C",
+      "kit": "KIT-NEO-4x8-BL-01",
+      "fornecedor": "F&G",
+      "aquisicao": {
+        "data": "2024-07-22",
+        "valor": 36607,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 576337,
+      "limiteCiclos": 900000,
+      "estado": "ok",
+      "local": "avaliacao",
+      "temMedicao": true,
+      "reservaSap": "RES-435115",
+      "poc": false
+    },
+    {
+      "serial": "FF-0112",
+      "familia": "FORMA_TERMOFORMAGEM",
+      "familiaLabel": "Forma de termoformagem",
+      "area": "embalagem",
+      "subarea": "formacao",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-01",
+      "formato": "ENG-2x10",
+      "posicao": "FF-C",
+      "kit": "KIT-ENG-2x10-BL-01",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2024-08-07",
+        "valor": 38529,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 850863,
+      "limiteCiclos": 900000,
+      "estado": "desgastado",
+      "local": "maquina",
+      "temMedicao": false,
+      "reservaSap": null,
+      "poc": false
+    },
+    {
+      "serial": "FF-0129",
+      "familia": "FORMA_TERMOFORMAGEM",
+      "familiaLabel": "Forma de termoformagem",
+      "area": "embalagem",
+      "subarea": "formacao",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-02",
+      "formato": "NEO-4x8",
+      "posicao": "FF-A",
+      "kit": "KIT-NEO-4x8-BL-02",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2025-01-12",
+        "valor": 36068,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 447436,
+      "limiteCiclos": 900000,
+      "estado": "ok",
+      "local": "armario",
+      "temMedicao": true,
+      "reservaSap": "RES-451912",
+      "poc": false
+    },
+    {
+      "serial": "FF-0146",
+      "familia": "FORMA_TERMOFORMAGEM",
+      "familiaLabel": "Forma de termoformagem",
+      "area": "embalagem",
+      "subarea": "formacao",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-02",
+      "formato": "ENG-2x10",
+      "posicao": "FF-B",
+      "kit": "KIT-ENG-2x10-BL-02",
+      "fornecedor": "F&G",
+      "aquisicao": {
+        "data": "2025-07-17",
+        "valor": 39173,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 730266,
+      "limiteCiclos": 900000,
+      "estado": "ok",
+      "local": "armario",
+      "temMedicao": false,
+      "reservaSap": "RES-418159",
+      "poc": false
+    },
+    {
+      "serial": "FF-0164",
+      "familia": "FORMA_TERMOFORMAGEM",
+      "familiaLabel": "Forma de termoformagem",
+      "area": "embalagem",
+      "subarea": "formacao",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-03",
+      "formato": "ALV-4x6",
+      "posicao": "FF-D",
+      "kit": "KIT-ALV-4x6-BL-03",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2024-12-02",
+        "valor": 39710,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 149724,
+      "limiteCiclos": 900000,
+      "estado": "ok",
+      "local": "reparo",
+      "temMedicao": true,
+      "reservaSap": "RES-465544",
+      "poc": false
+    },
+    {
+      "serial": "FF-0182",
+      "familia": "FORMA_TERMOFORMAGEM",
+      "familiaLabel": "Forma de termoformagem",
+      "area": "embalagem",
+      "subarea": "formacao",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-03",
+      "formato": "ENG-2x10",
+      "posicao": "FF-B",
+      "kit": "KIT-ENG-2x10-BL-03",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2025-07-05",
+        "valor": 36374,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 426999,
+      "limiteCiclos": 900000,
+      "estado": "ok",
+      "local": "armario",
+      "temMedicao": true,
+      "reservaSap": "RES-488579",
+      "poc": false
+    },
+    {
+      "serial": "FF-0200",
+      "familia": "FORMA_TERMOFORMAGEM",
+      "familiaLabel": "Forma de termoformagem",
+      "area": "embalagem",
+      "subarea": "formacao",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-04",
+      "formato": "ENG-2x10",
+      "posicao": "FF-C",
+      "kit": "KIT-ENG-2x10-BL-04",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2024-11-25",
+        "valor": 37796,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 337489,
+      "limiteCiclos": 900000,
+      "estado": "ok",
+      "local": "avaliacao",
+      "temMedicao": true,
+      "reservaSap": null,
+      "poc": false
+    },
+    {
+      "serial": "FF-0205",
+      "familia": "FORMA_TERMOFORMAGEM",
+      "familiaLabel": "Forma de termoformagem",
+      "area": "embalagem",
+      "subarea": "formacao",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-04",
+      "formato": "NEO-4x8",
+      "posicao": "FF-D",
+      "kit": "KIT-NEO-4x8-BL-04",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2024-11-23",
+        "valor": 36272,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 259368,
+      "limiteCiclos": 900000,
+      "estado": "ok",
+      "local": "reparo",
+      "temMedicao": true,
+      "reservaSap": "RES-402112",
+      "poc": false
+    },
+    {
+      "serial": "FF-0216",
+      "familia": "FORMA_TERMOFORMAGEM",
+      "familiaLabel": "Forma de termoformagem",
+      "area": "embalagem",
+      "subarea": "formacao",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-05",
+      "formato": "ALV-4x6",
+      "posicao": "FF-B",
+      "kit": "KIT-ALV-4x6-BL-05",
+      "fornecedor": "F&G",
+      "aquisicao": {
+        "data": "2025-05-24",
+        "valor": 39617,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 119037,
+      "limiteCiclos": 900000,
+      "estado": "ok",
+      "local": "reparo",
+      "temMedicao": false,
+      "reservaSap": "RES-461560",
+      "poc": false
+    },
+    {
+      "serial": "FF-0221",
+      "familia": "FORMA_TERMOFORMAGEM",
+      "familiaLabel": "Forma de termoformagem",
+      "area": "embalagem",
+      "subarea": "formacao",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-05",
+      "formato": "BEN-4x4",
+      "posicao": "FF-B",
+      "kit": "KIT-BEN-4x4-BL-05",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2023-09-25",
+        "valor": 37575,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 489677,
+      "limiteCiclos": 900000,
+      "estado": "ok",
+      "local": "avaliacao",
+      "temMedicao": false,
+      "reservaSap": null,
+      "poc": false
+    },
+    {
+      "serial": "FF-0230",
+      "familia": "FORMA_TERMOFORMAGEM",
+      "familiaLabel": "Forma de termoformagem",
+      "area": "embalagem",
+      "subarea": "formacao",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-06",
+      "formato": "ENG-2x10",
+      "posicao": "FF-A",
+      "kit": "KIT-ENG-2x10-BL-06",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2024-01-09",
+        "valor": 37150,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 317119,
+      "limiteCiclos": 900000,
+      "estado": "ok",
+      "local": "maquina",
+      "temMedicao": true,
+      "reservaSap": "RES-461076",
+      "poc": false
+    },
+    {
+      "serial": "FF-0249",
+      "familia": "FORMA_TERMOFORMAGEM",
+      "familiaLabel": "Forma de termoformagem",
+      "area": "embalagem",
+      "subarea": "formacao",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-06",
+      "formato": "ALV-4x6",
+      "posicao": "FF-C",
+      "kit": "KIT-ALV-4x6-BL-06",
+      "fornecedor": "F&G",
+      "aquisicao": {
+        "data": "2024-05-25",
+        "valor": 39055,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 182488,
+      "limiteCiclos": 900000,
+      "estado": "novo",
+      "local": "avaliacao",
+      "temMedicao": true,
+      "reservaSap": "RES-462712",
+      "poc": false
+    },
+    {
+      "serial": "FA-0107",
+      "familia": "GUIA_ALIMENTACAO",
+      "familiaLabel": "Guia de alimentação",
+      "area": "embalagem",
+      "subarea": "alimentacao",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-01",
+      "formato": "NEO-4x8",
+      "posicao": "FA-A",
+      "kit": "KIT-NEO-4x8-BL-01",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2025-06-19",
+        "valor": 13438,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 122248,
+      "limiteCiclos": 1400000,
+      "estado": "ok",
+      "local": "reparo",
+      "temMedicao": true,
+      "reservaSap": "RES-443202",
+      "poc": false
+    },
+    {
+      "serial": "FA-0121",
+      "familia": "GUIA_ALIMENTACAO",
+      "familiaLabel": "Guia de alimentação",
+      "area": "embalagem",
+      "subarea": "alimentacao",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-01",
+      "formato": "BEN-4x4",
+      "posicao": "FA-C",
+      "kit": "KIT-BEN-4x4-BL-01",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2024-05-30",
+        "valor": 13234,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 432332,
+      "limiteCiclos": 1400000,
+      "estado": "ok",
+      "local": "reparo",
+      "temMedicao": true,
+      "reservaSap": "RES-447427",
+      "poc": false
+    },
+    {
+      "serial": "FA-0137",
+      "familia": "GUIA_ALIMENTACAO",
+      "familiaLabel": "Guia de alimentação",
+      "area": "embalagem",
+      "subarea": "alimentacao",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-02",
+      "formato": "NEO-4x8",
+      "posicao": "FA-C",
+      "kit": "KIT-NEO-4x8-BL-02",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2025-05-14",
+        "valor": 11573,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 809817,
+      "limiteCiclos": 1400000,
+      "estado": "ok",
+      "local": "avaliacao",
+      "temMedicao": true,
+      "reservaSap": "RES-404163",
+      "poc": false
+    },
+    {
+      "serial": "FA-0145",
+      "familia": "GUIA_ALIMENTACAO",
+      "familiaLabel": "Guia de alimentação",
+      "area": "embalagem",
+      "subarea": "alimentacao",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-02",
+      "formato": "ALV-4x6",
+      "posicao": "FA-A",
+      "kit": "KIT-ALV-4x6-BL-02",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2023-09-30",
+        "valor": 10649,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 387324,
+      "limiteCiclos": 1400000,
+      "estado": "ok",
+      "local": "reparo",
+      "temMedicao": true,
+      "reservaSap": "RES-480368",
+      "poc": false
+    },
+    {
+      "serial": "FA-0165",
+      "familia": "GUIA_ALIMENTACAO",
+      "familiaLabel": "Guia de alimentação",
+      "area": "embalagem",
+      "subarea": "alimentacao",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-03",
+      "formato": "ENG-2x10",
+      "posicao": "FA-A",
+      "kit": "KIT-ENG-2x10-BL-03",
+      "fornecedor": "F&G",
+      "aquisicao": {
+        "data": "2025-08-29",
+        "valor": 11107,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 1572287,
+      "limiteCiclos": 1400000,
+      "estado": "desgastado",
+      "local": "maquina",
+      "temMedicao": true,
+      "reservaSap": "RES-458213",
+      "poc": false
+    },
+    {
+      "serial": "FA-0172",
+      "familia": "GUIA_ALIMENTACAO",
+      "familiaLabel": "Guia de alimentação",
+      "area": "embalagem",
+      "subarea": "alimentacao",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-03",
+      "formato": "NEO-4x8",
+      "posicao": "FA-C",
+      "kit": "KIT-NEO-4x8-BL-03",
+      "fornecedor": "F&G",
+      "aquisicao": {
+        "data": "2024-07-28",
+        "valor": 11420,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 191389,
+      "limiteCiclos": 1400000,
+      "estado": "ok",
+      "local": "avaliacao",
+      "temMedicao": true,
+      "reservaSap": "RES-431587",
+      "poc": false
+    },
+    {
+      "serial": "FA-0186",
+      "familia": "GUIA_ALIMENTACAO",
+      "familiaLabel": "Guia de alimentação",
+      "area": "embalagem",
+      "subarea": "alimentacao",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-04",
+      "formato": "ENG-2x10",
+      "posicao": "FA-B",
+      "kit": "KIT-ENG-2x10-BL-04",
+      "fornecedor": "F&G",
+      "aquisicao": {
+        "data": "2023-09-13",
+        "valor": 11745,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 1005250,
+      "limiteCiclos": 1400000,
+      "estado": "novo",
+      "local": "armario",
+      "temMedicao": true,
+      "reservaSap": null,
+      "poc": false
+    },
+    {
+      "serial": "FA-0192",
+      "familia": "GUIA_ALIMENTACAO",
+      "familiaLabel": "Guia de alimentação",
+      "area": "embalagem",
+      "subarea": "alimentacao",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-04",
+      "formato": "NEO-4x8",
+      "posicao": "FA-D",
+      "kit": "KIT-NEO-4x8-BL-04",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2025-02-10",
+        "valor": 12632,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 439153,
+      "limiteCiclos": 1400000,
+      "estado": "ok",
+      "local": "avaliacao",
+      "temMedicao": true,
+      "reservaSap": null,
+      "poc": false
+    },
+    {
+      "serial": "FA-0211",
+      "familia": "GUIA_ALIMENTACAO",
+      "familiaLabel": "Guia de alimentação",
+      "area": "embalagem",
+      "subarea": "alimentacao",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-05",
+      "formato": "BEN-4x4",
+      "posicao": "FA-B",
+      "kit": "KIT-BEN-4x4-BL-05",
+      "fornecedor": "F&G",
+      "aquisicao": {
+        "data": "2024-08-19",
+        "valor": 11498,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 932640,
+      "limiteCiclos": 1400000,
+      "estado": "ok",
+      "local": "armario",
+      "temMedicao": false,
+      "reservaSap": "RES-417865",
+      "poc": false
+    },
+    {
+      "serial": "FA-0231",
+      "familia": "GUIA_ALIMENTACAO",
+      "familiaLabel": "Guia de alimentação",
+      "area": "embalagem",
+      "subarea": "alimentacao",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-05",
+      "formato": "NEO-4x8",
+      "posicao": "FA-B",
+      "kit": "KIT-NEO-4x8-BL-05",
+      "fornecedor": "F&G",
+      "aquisicao": {
+        "data": "2025-12-14",
+        "valor": 11643,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 522478,
+      "limiteCiclos": 1400000,
+      "estado": "ok",
+      "local": "reparo",
+      "temMedicao": true,
+      "reservaSap": "RES-488350",
+      "poc": false
+    },
+    {
+      "serial": "FA-0241",
+      "familia": "GUIA_ALIMENTACAO",
+      "familiaLabel": "Guia de alimentação",
+      "area": "embalagem",
+      "subarea": "alimentacao",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-06",
+      "formato": "NEO-4x8",
+      "posicao": "FA-D",
+      "kit": "KIT-NEO-4x8-BL-06",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2024-02-12",
+        "valor": 12632,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 216012,
+      "limiteCiclos": 1400000,
+      "estado": "ok",
+      "local": "reparo",
+      "temMedicao": true,
+      "reservaSap": "RES-402849",
+      "poc": false
+    },
+    {
+      "serial": "FA-0248",
+      "familia": "GUIA_ALIMENTACAO",
+      "familiaLabel": "Guia de alimentação",
+      "area": "embalagem",
+      "subarea": "alimentacao",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-06",
+      "formato": "ENG-2x10",
+      "posicao": "FA-A",
+      "kit": "KIT-ENG-2x10-BL-06",
+      "fornecedor": "F&G",
+      "aquisicao": {
+        "data": "2024-06-26",
+        "valor": 13712,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 239437,
+      "limiteCiclos": 1400000,
+      "estado": "ok",
+      "local": "reparo",
+      "temMedicao": false,
+      "reservaSap": null,
+      "poc": false
+    },
+    {
+      "serial": "FS-0108",
+      "familia": "PLACA_SELAGEM",
+      "familiaLabel": "Placa de selagem",
+      "area": "embalagem",
+      "subarea": "selagem",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-01",
+      "formato": "ALV-4x6",
+      "posicao": "FS-C",
+      "kit": "KIT-ALV-4x6-BL-01",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2025-11-08",
+        "valor": 46496,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 188008,
+      "limiteCiclos": 950000,
+      "estado": "ok",
+      "local": "armario",
+      "temMedicao": true,
+      "reservaSap": null,
+      "poc": false
+    },
+    {
+      "serial": "FS-0128",
+      "familia": "PLACA_SELAGEM",
+      "familiaLabel": "Placa de selagem",
+      "area": "embalagem",
+      "subarea": "selagem",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-01",
+      "formato": "BEN-4x4",
+      "posicao": "FS-A",
+      "kit": "KIT-BEN-4x4-BL-01",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2023-11-24",
+        "valor": 47760,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 1001119,
+      "limiteCiclos": 950000,
+      "estado": "danificado",
+      "local": "reparo",
+      "temMedicao": true,
+      "reservaSap": null,
+      "poc": false
+    },
+    {
+      "serial": "FS-0134",
+      "familia": "PLACA_SELAGEM",
+      "familiaLabel": "Placa de selagem",
+      "area": "embalagem",
+      "subarea": "selagem",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-02",
+      "formato": "ENG-2x10",
+      "posicao": "FS-B",
+      "kit": "KIT-ENG-2x10-BL-02",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2024-05-26",
+        "valor": 47576,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 156729,
+      "limiteCiclos": 950000,
+      "estado": "ok",
+      "local": "reparo",
+      "temMedicao": true,
+      "reservaSap": null,
+      "poc": false
+    },
+    {
+      "serial": "FS-0151",
+      "familia": "PLACA_SELAGEM",
+      "familiaLabel": "Placa de selagem",
+      "area": "embalagem",
+      "subarea": "selagem",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-02",
+      "formato": "NEO-4x8",
+      "posicao": "FS-B",
+      "kit": "KIT-NEO-4x8-BL-02",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2024-07-10",
+        "valor": 46901,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 264125,
+      "limiteCiclos": 950000,
+      "estado": "ok",
+      "local": "avaliacao",
+      "temMedicao": true,
+      "reservaSap": "RES-402353",
+      "poc": false
+    },
+    {
+      "serial": "FS-0169",
+      "familia": "PLACA_SELAGEM",
+      "familiaLabel": "Placa de selagem",
+      "area": "embalagem",
+      "subarea": "selagem",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-03",
+      "formato": "ALV-4x6",
+      "posicao": "FS-D",
+      "kit": "KIT-ALV-4x6-BL-03",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2024-04-27",
+        "valor": 48652,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 190203,
+      "limiteCiclos": 950000,
+      "estado": "ok",
+      "local": "maquina",
+      "temMedicao": true,
+      "reservaSap": "RES-422287",
+      "poc": false
+    },
+    {
+      "serial": "FS-0189",
+      "familia": "PLACA_SELAGEM",
+      "familiaLabel": "Placa de selagem",
+      "area": "embalagem",
+      "subarea": "selagem",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-03",
+      "formato": "ENG-2x10",
+      "posicao": "FS-B",
+      "kit": "KIT-ENG-2x10-BL-03",
+      "fornecedor": "F&G",
+      "aquisicao": {
+        "data": "2025-11-28",
+        "valor": 46872,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 185022,
+      "limiteCiclos": 950000,
+      "estado": "ok",
+      "local": "reparo",
+      "temMedicao": true,
+      "reservaSap": "RES-427142",
+      "poc": false
+    },
+    {
+      "serial": "FS-0208",
+      "familia": "PLACA_SELAGEM",
+      "familiaLabel": "Placa de selagem",
+      "area": "embalagem",
+      "subarea": "selagem",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-04",
+      "formato": "NEO-4x8",
+      "posicao": "FS-B",
+      "kit": "KIT-NEO-4x8-BL-04",
+      "fornecedor": "F&G",
+      "aquisicao": {
+        "data": "2024-09-24",
+        "valor": 46822,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 956931,
+      "limiteCiclos": 950000,
+      "estado": "danificado",
+      "local": "maquina",
+      "temMedicao": false,
+      "reservaSap": null,
+      "poc": false
+    },
+    {
+      "serial": "FS-0212",
+      "familia": "PLACA_SELAGEM",
+      "familiaLabel": "Placa de selagem",
+      "area": "embalagem",
+      "subarea": "selagem",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-04",
+      "formato": "ENG-2x10",
+      "posicao": "FS-D",
+      "kit": "KIT-ENG-2x10-BL-04",
+      "fornecedor": "F&G",
+      "aquisicao": {
+        "data": "2025-09-02",
+        "valor": 49018,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 591340,
+      "limiteCiclos": 950000,
+      "estado": "ok",
+      "local": "armario",
+      "temMedicao": true,
+      "reservaSap": "RES-403179",
+      "poc": false
+    },
+    {
+      "serial": "FS-0223",
+      "familia": "PLACA_SELAGEM",
+      "familiaLabel": "Placa de selagem",
+      "area": "embalagem",
+      "subarea": "selagem",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-05",
+      "formato": "BEN-4x4",
+      "posicao": "FS-D",
+      "kit": "KIT-BEN-4x4-BL-05",
+      "fornecedor": "F&G",
+      "aquisicao": {
+        "data": "2024-01-30",
+        "valor": 48548,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 624342,
+      "limiteCiclos": 950000,
+      "estado": "novo",
+      "local": "avaliacao",
+      "temMedicao": true,
+      "reservaSap": "RES-471619",
+      "poc": false
+    },
+    {
+      "serial": "FS-0243",
+      "familia": "PLACA_SELAGEM",
+      "familiaLabel": "Placa de selagem",
+      "area": "embalagem",
+      "subarea": "selagem",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-05",
+      "formato": "ENG-2x10",
+      "posicao": "FS-D",
+      "kit": "KIT-ENG-2x10-BL-05",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2025-07-13",
+        "valor": 49860,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 871011,
+      "limiteCiclos": 950000,
+      "estado": "desgastado",
+      "local": "armario",
+      "temMedicao": true,
+      "reservaSap": null,
+      "poc": false
+    },
+    {
+      "serial": "FS-0258",
+      "familia": "PLACA_SELAGEM",
+      "familiaLabel": "Placa de selagem",
+      "area": "embalagem",
+      "subarea": "selagem",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-06",
+      "formato": "ALV-4x6",
+      "posicao": "FS-D",
+      "kit": "KIT-ALV-4x6-BL-06",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2025-10-15",
+        "valor": 48447,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 814551,
+      "limiteCiclos": 950000,
+      "estado": "ok",
+      "local": "armario",
+      "temMedicao": false,
+      "reservaSap": "RES-443731",
+      "poc": false
+    },
+    {
+      "serial": "FS-0276",
+      "familia": "PLACA_SELAGEM",
+      "familiaLabel": "Placa de selagem",
+      "area": "embalagem",
+      "subarea": "selagem",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-06",
+      "formato": "BEN-4x4",
+      "posicao": "FS-C",
+      "kit": "KIT-BEN-4x4-BL-06",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2023-12-18",
+        "valor": 47356,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 959083,
+      "limiteCiclos": 950000,
+      "estado": "danificado",
+      "local": "avaliacao",
+      "temMedicao": true,
+      "reservaSap": "RES-438148",
+      "poc": false
+    },
+    {
+      "serial": "FC-0103",
+      "familia": "FACA_CORTE",
+      "familiaLabel": "Faca de corte",
+      "area": "embalagem",
+      "subarea": "corte",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-01",
+      "formato": "BEN-4x4",
+      "posicao": "FC-B",
+      "kit": "KIT-BEN-4x4-BL-01",
+      "fornecedor": "F&G",
+      "aquisicao": {
+        "data": "2025-09-23",
+        "valor": 20576,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 278293,
+      "limiteCiclos": 700000,
+      "estado": "ok",
+      "local": "armario",
+      "temMedicao": true,
+      "reservaSap": "RES-404493",
+      "poc": false
+    },
+    {
+      "serial": "FC-0115",
+      "familia": "FACA_CORTE",
+      "familiaLabel": "Faca de corte",
+      "area": "embalagem",
+      "subarea": "corte",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-01",
+      "formato": "ALV-4x6",
+      "posicao": "FC-C",
+      "kit": "KIT-ALV-4x6-BL-01",
+      "fornecedor": "F&G",
+      "aquisicao": {
+        "data": "2024-05-27",
+        "valor": 21315,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 117861,
+      "limiteCiclos": 700000,
+      "estado": "ok",
+      "local": "reparo",
+      "temMedicao": true,
+      "reservaSap": "RES-499017",
+      "poc": false
+    },
+    {
+      "serial": "FC-0136",
+      "familia": "FACA_CORTE",
+      "familiaLabel": "Faca de corte",
+      "area": "embalagem",
+      "subarea": "corte",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-02",
+      "formato": "NEO-4x8",
+      "posicao": "FC-B",
+      "kit": "KIT-NEO-4x8-BL-02",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2025-05-21",
+        "valor": 20419,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 410404,
+      "limiteCiclos": 700000,
+      "estado": "ok",
+      "local": "avaliacao",
+      "temMedicao": false,
+      "reservaSap": "RES-449316",
+      "poc": false
+    },
+    {
+      "serial": "FC-0154",
+      "familia": "FACA_CORTE",
+      "familiaLabel": "Faca de corte",
+      "area": "embalagem",
+      "subarea": "corte",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-02",
+      "formato": "BEN-4x4",
+      "posicao": "FC-C",
+      "kit": "KIT-BEN-4x4-BL-02",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2025-01-01",
+        "valor": 21692,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 393164,
+      "limiteCiclos": 700000,
+      "estado": "ok",
+      "local": "avaliacao",
+      "temMedicao": true,
+      "reservaSap": null,
+      "poc": false
+    },
+    {
+      "serial": "FC-0159",
+      "familia": "FACA_CORTE",
+      "familiaLabel": "Faca de corte",
+      "area": "embalagem",
+      "subarea": "corte",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-03",
+      "formato": "NEO-4x8",
+      "posicao": "FC-B",
+      "kit": "KIT-NEO-4x8-BL-03",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2025-03-03",
+        "valor": 20346,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 377645,
+      "limiteCiclos": 700000,
+      "estado": "ok",
+      "local": "reparo",
+      "temMedicao": false,
+      "reservaSap": null,
+      "poc": false
+    },
+    {
+      "serial": "FC-0170",
+      "familia": "FACA_CORTE",
+      "familiaLabel": "Faca de corte",
+      "area": "embalagem",
+      "subarea": "corte",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-03",
+      "formato": "ALV-4x6",
+      "posicao": "FC-B",
+      "kit": "KIT-ALV-4x6-BL-03",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2023-11-26",
+        "valor": 21800,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 746220,
+      "limiteCiclos": 700000,
+      "estado": "desgastado",
+      "local": "armario",
+      "temMedicao": true,
+      "reservaSap": null,
+      "poc": false
+    },
+    {
+      "serial": "FC-0179",
+      "familia": "FACA_CORTE",
+      "familiaLabel": "Faca de corte",
+      "area": "embalagem",
+      "subarea": "corte",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-04",
+      "formato": "BEN-4x4",
+      "posicao": "FC-C",
+      "kit": "KIT-BEN-4x4-BL-04",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2025-02-26",
+        "valor": 21574,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 371683,
+      "limiteCiclos": 700000,
+      "estado": "ok",
+      "local": "maquina",
+      "temMedicao": true,
+      "reservaSap": null,
+      "poc": false
+    },
+    {
+      "serial": "FC-0186",
+      "familia": "FACA_CORTE",
+      "familiaLabel": "Faca de corte",
+      "area": "embalagem",
+      "subarea": "corte",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-04",
+      "formato": "ENG-2x10",
+      "posicao": "FC-A",
+      "kit": "KIT-ENG-2x10-BL-04",
+      "fornecedor": "F&G",
+      "aquisicao": {
+        "data": "2024-02-17",
+        "valor": 19936,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 750954,
+      "limiteCiclos": 700000,
+      "estado": "danificado",
+      "local": "avaliacao",
+      "temMedicao": true,
+      "reservaSap": "RES-492886",
+      "poc": false
+    },
+    {
+      "serial": "FC-0193",
+      "familia": "FACA_CORTE",
+      "familiaLabel": "Faca de corte",
+      "area": "embalagem",
+      "subarea": "corte",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-05",
+      "formato": "ENG-2x10",
+      "posicao": "FC-C",
+      "kit": "KIT-ENG-2x10-BL-05",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2023-12-25",
+        "valor": 22561,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 620627,
+      "limiteCiclos": 700000,
+      "estado": "desgastado",
+      "local": "reparo",
+      "temMedicao": true,
+      "reservaSap": "RES-423701",
+      "poc": false
+    },
+    {
+      "serial": "FC-0211",
+      "familia": "FACA_CORTE",
+      "familiaLabel": "Faca de corte",
+      "area": "embalagem",
+      "subarea": "corte",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-05",
+      "formato": "ALV-4x6",
+      "posicao": "FC-D",
+      "kit": "KIT-ALV-4x6-BL-05",
+      "fornecedor": "F&G",
+      "aquisicao": {
+        "data": "2026-01-13",
+        "valor": 21912,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 521687,
+      "limiteCiclos": 700000,
+      "estado": "ok",
+      "local": "maquina",
+      "temMedicao": true,
+      "reservaSap": "RES-409043",
+      "poc": false
+    },
+    {
+      "serial": "FC-0228",
+      "familia": "FACA_CORTE",
+      "familiaLabel": "Faca de corte",
+      "area": "embalagem",
+      "subarea": "corte",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-06",
+      "formato": "ALV-4x6",
+      "posicao": "FC-A",
+      "kit": "KIT-ALV-4x6-BL-06",
+      "fornecedor": "F&G",
+      "aquisicao": {
+        "data": "2023-09-08",
+        "valor": 23015,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 666342,
+      "limiteCiclos": 700000,
+      "estado": "desgastado",
+      "local": "reparo",
+      "temMedicao": true,
+      "reservaSap": null,
+      "poc": false
+    },
+    {
+      "serial": "FC-0244",
+      "familia": "FACA_CORTE",
+      "familiaLabel": "Faca de corte",
+      "area": "embalagem",
+      "subarea": "corte",
+      "site": "P-19",
+      "galpao": "G2",
+      "maquina": "BL-06",
+      "formato": "BEN-4x4",
+      "posicao": "FC-A",
+      "kit": "KIT-BEN-4x4-BL-06",
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2025-03-29",
+        "valor": 20267,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 659739,
+      "limiteCiclos": 700000,
+      "estado": "desgastado",
+      "local": "maquina",
+      "temMedicao": false,
+      "reservaSap": null,
+      "poc": false
+    },
+    {
+      "serial": "PS-0107",
+      "familia": "PUNCAO_SUPERIOR",
+      "familiaLabel": "Punção superior",
+      "area": "compressao",
+      "subarea": null,
+      "site": "P-19",
+      "galpao": "G1",
+      "maquina": "CP-01",
+      "formato": null,
+      "posicao": "PS-D",
+      "kit": null,
+      "fornecedor": "F&G",
+      "aquisicao": {
+        "data": "2025-05-11",
+        "valor": 4090,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 341011,
+      "limiteCiclos": 1200000,
+      "estado": "ok",
+      "local": "maquina",
+      "temMedicao": false,
+      "reservaSap": "RES-461841",
+      "poc": true
+    },
+    {
+      "serial": "PS-0125",
+      "familia": "PUNCAO_SUPERIOR",
+      "familiaLabel": "Punção superior",
+      "area": "compressao",
+      "subarea": null,
+      "site": "P-19",
+      "galpao": "G1",
+      "maquina": "CP-02",
+      "formato": null,
+      "posicao": "PS-A",
+      "kit": null,
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2023-10-26",
+        "valor": 4394,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 70788,
+      "limiteCiclos": 1200000,
+      "estado": "ok",
+      "local": "reparo",
+      "temMedicao": true,
+      "reservaSap": "RES-489180",
+      "poc": false
+    },
+    {
+      "serial": "PS-0130",
+      "familia": "PUNCAO_SUPERIOR",
+      "familiaLabel": "Punção superior",
+      "area": "compressao",
+      "subarea": null,
+      "site": "P-19",
+      "galpao": "G1",
+      "maquina": "CP-03",
+      "formato": null,
+      "posicao": "PS-B",
+      "kit": null,
+      "fornecedor": "F&G",
+      "aquisicao": {
+        "data": "2024-08-28",
+        "valor": 4886,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 1113162,
+      "limiteCiclos": 1200000,
+      "estado": "desgastado",
+      "local": "avaliacao",
+      "temMedicao": true,
+      "reservaSap": "RES-445227",
+      "poc": false
+    },
+    {
+      "serial": "PS-0138",
+      "familia": "PUNCAO_SUPERIOR",
+      "familiaLabel": "Punção superior",
+      "area": "compressao",
+      "subarea": null,
+      "site": "P-19",
+      "galpao": "G1",
+      "maquina": "CP-04",
+      "formato": null,
+      "posicao": "PS-B",
+      "kit": null,
+      "fornecedor": "P&F",
+      "aquisicao": {
+        "data": "2024-04-30",
+        "valor": 3429,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 948944,
+      "limiteCiclos": 1200000,
+      "estado": "ok",
+      "local": "reparo",
+      "temMedicao": true,
+      "reservaSap": "RES-481483",
+      "poc": false
+    },
+    {
+      "serial": "TG-0118",
+      "familia": "TELA_GRANULADOR",
+      "familiaLabel": "Tela de granulador",
+      "area": "manipulacao",
+      "subarea": null,
+      "site": "P-19",
+      "galpao": "G3",
+      "maquina": "GR-01",
+      "formato": null,
+      "posicao": "TG-D",
+      "kit": null,
+      "fornecedor": "F&G",
+      "aquisicao": {
+        "data": "2024-03-25",
+        "valor": 4288,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 501750,
+      "limiteCiclos": 600000,
+      "estado": "desgastado",
+      "local": "maquina",
+      "temMedicao": true,
+      "reservaSap": "RES-484438",
+      "poc": true
+    },
+    {
+      "serial": "TG-0121",
+      "familia": "TELA_GRANULADOR",
+      "familiaLabel": "Tela de granulador",
+      "area": "manipulacao",
+      "subarea": null,
+      "site": "P-19",
+      "galpao": "G3",
+      "maquina": "GR-02",
+      "formato": null,
+      "posicao": "TG-B",
+      "kit": null,
+      "fornecedor": "F&G",
+      "aquisicao": {
+        "data": "2025-03-09",
+        "valor": 3368,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 552502,
+      "limiteCiclos": 600000,
+      "estado": "desgastado",
+      "local": "armario",
+      "temMedicao": true,
+      "reservaSap": "RES-477906",
+      "poc": false
+    },
+    {
+      "serial": "TG-0134",
+      "familia": "TELA_GRANULADOR",
+      "familiaLabel": "Tela de granulador",
+      "area": "manipulacao",
+      "subarea": null,
+      "site": "P-19",
+      "galpao": "G3",
+      "maquina": "GR-03",
+      "formato": null,
+      "posicao": "TG-B",
+      "kit": null,
+      "fornecedor": "F&G",
+      "aquisicao": {
+        "data": "2025-11-06",
+        "valor": 5106,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 519720,
+      "limiteCiclos": 600000,
+      "estado": "ok",
+      "local": "maquina",
+      "temMedicao": true,
+      "reservaSap": null,
+      "poc": false
+    },
+    {
+      "serial": "TG-0153",
+      "familia": "TELA_GRANULADOR",
+      "familiaLabel": "Tela de granulador",
+      "area": "manipulacao",
+      "subarea": null,
+      "site": "P-19",
+      "galpao": "G3",
+      "maquina": "GR-04",
+      "formato": null,
+      "posicao": "TG-C",
+      "kit": null,
+      "fornecedor": "F&G",
+      "aquisicao": {
+        "data": "2024-08-12",
+        "valor": 2474,
+        "vidaContabilAnos": 10
+      },
+      "ciclos": 626193,
+      "limiteCiclos": 600000,
+      "estado": "desgastado",
+      "local": "armario",
+      "temMedicao": true,
+      "reservaSap": "RES-448106",
+      "poc": false
+    }
+  ],
+  "medicoes": [
+    {
+      "id": "MED-FS0192-000",
+      "itemSerial": "FS-0192",
+      "data": "2025-12-12T09:10:00",
+      "rig": "EMB-01",
+      "rigDescricao": "gabarito fixo + backlight + lente telecêntrica",
+      "calibracao": {
+        "certificado": "LOC-2026-0413",
+        "validade": "2027-02-28",
+        "rastreavel": true
+      },
+      "ciclosNaMedicao": 0,
+      "cotas": [
+        {
+          "alvo": "C01",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.3,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C02",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.27,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C03",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.31,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C04",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.3,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C05",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.27,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C06",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.3,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C07",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.3,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C08",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.29,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C09",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.28,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C10",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.28,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C11",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.28,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C12",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.29,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C13",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.29,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C14",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.28,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C15",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.29,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C16",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.29,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C17",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.31,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C18",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.29,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C19",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.26,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C20",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.3,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C21",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.26,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C22",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.31,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C23",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.33,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C24",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.3,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C25",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.26,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C26",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.3,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C27",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.34,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C28",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.27,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C29",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.3,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C30",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.32,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C31",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.3,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C32",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.3,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        }
+      ],
+      "serrilha": {
+        "perdaAlturaPico": 0.0,
+        "unidade": "%",
+        "limite": 35.0,
+        "alvo": "SB1",
+        "status": "ok"
+      },
+      "planicidade": {
+        "valor": 0.02,
+        "limite": 0.1,
+        "unidade": "mm",
+        "status": "ok"
+      },
+      "achados": [],
+      "estado": "novo",
+      "concordanciaPainel": null,
+      "avaliadoresPainel": null,
+      "decisaoHumana": {
+        "usuario": "Líder de ferramentaria · turno A",
+        "decisao": "aprovar",
+        "data": "2025-12-12T09:40:00",
+        "observacao": "Peça nova — escaneamento de referência (ponto zero)."
+      }
+    },
+    {
+      "id": "MED-FS0192-001",
+      "itemSerial": "FS-0192",
+      "data": "2026-03-19T14:05:00",
+      "rig": "EMB-01",
+      "rigDescricao": "gabarito fixo + backlight + lente telecêntrica",
+      "calibracao": {
+        "certificado": "LOC-2026-0413",
+        "validade": "2027-02-28",
+        "rastreavel": true
+      },
+      "ciclosNaMedicao": 214800,
+      "cotas": [
+        {
+          "alvo": "C01",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.28,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C02",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.28,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C03",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.3,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C04",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.29,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C05",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.28,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C06",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.31,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C07",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.26,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C08",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.29,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C09",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.29,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C10",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.3,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C11",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.26,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C12",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.26,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C13",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.3,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C14",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.28,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C15",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.25,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C16",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.29,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C17",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.3,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C18",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.28,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C19",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.31,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C20",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.29,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C21",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.28,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C22",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.28,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C23",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.3,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C24",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.3,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C25",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.29,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C26",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.29,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C27",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.27,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C28",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.26,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C29",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.28,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C30",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.27,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C31",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.24,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C32",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.26,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        }
+      ],
+      "serrilha": {
+        "perdaAlturaPico": 12.0,
+        "unidade": "%",
+        "limite": 35.0,
+        "alvo": "SB1",
+        "status": "ok"
+      },
+      "planicidade": {
+        "valor": 0.03,
+        "limite": 0.1,
+        "unidade": "mm",
+        "status": "ok"
+      },
+      "achados": [],
+      "estado": "ok",
+      "concordanciaPainel": null,
+      "avaliadoresPainel": null,
+      "decisaoHumana": {
+        "usuario": "Líder de ferramentaria · turno B",
+        "decisao": "aprovar",
+        "data": "2026-03-19T14:22:00",
+        "observacao": "Dentro do padrão."
+      }
+    },
+    {
+      "id": "MED-FS0192-002",
+      "itemSerial": "FS-0192",
+      "data": "2026-06-02T10:30:00",
+      "rig": "EMB-01",
+      "rigDescricao": "gabarito fixo + backlight + lente telecêntrica",
+      "calibracao": {
+        "certificado": "LOC-2026-0413",
+        "validade": "2027-02-28",
+        "rastreavel": true
+      },
+      "ciclosNaMedicao": 438100,
+      "cotas": [
+        {
+          "alvo": "C01",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.24,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C02",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.26,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C03",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.27,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C04",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.28,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C05",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.27,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C06",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.26,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C07",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.26,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C08",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.29,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C09",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.28,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C10",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.29,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C11",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.27,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C12",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.3,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C13",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.27,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C14",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.29,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C15",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.27,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C16",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.25,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C17",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.24,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C18",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.27,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C19",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.26,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C20",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.26,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C21",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.26,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C22",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.28,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C23",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.27,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C24",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.26,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C25",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.29,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C26",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.26,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C27",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.3,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C28",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.27,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C29",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.25,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C30",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.29,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C31",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.28,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C32",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.29,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        }
+      ],
+      "serrilha": {
+        "perdaAlturaPico": 23.0,
+        "unidade": "%",
+        "limite": 35.0,
+        "alvo": "SB1",
+        "status": "ok"
+      },
+      "planicidade": {
+        "valor": 0.04,
+        "limite": 0.1,
+        "unidade": "mm",
+        "status": "ok"
+      },
+      "achados": [
+        {
+          "id": "A0",
+          "tipo": "incrustacao",
+          "rotulo": "Incrustação leve",
+          "score": 0.38,
+          "severidade": "observar",
+          "alvo": "C29",
+          "detalhe": "limpeza realizada"
+        }
+      ],
+      "estado": "ok",
+      "concordanciaPainel": null,
+      "avaliadoresPainel": null,
+      "decisaoHumana": {
+        "usuario": "Líder de ferramentaria · turno A",
+        "decisao": "aprovar",
+        "data": "2026-06-02T10:52:00",
+        "observacao": "Liberada após limpeza dos furos de vácuo."
+      }
+    },
+    {
+      "id": "MED-FS0192-003",
+      "itemSerial": "FS-0192",
+      "data": "2026-07-28T08:15:00",
+      "rig": "EMB-01",
+      "rigDescricao": "gabarito fixo + backlight + lente telecêntrica",
+      "calibracao": {
+        "certificado": "LOC-2026-0413",
+        "validade": "2027-02-28",
+        "rastreavel": true
+      },
+      "ciclosNaMedicao": 651300,
+      "cotas": [
+        {
+          "alvo": "C01",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.26,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C02",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.28,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C03",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.24,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C04",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.27,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C05",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.23,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C06",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.29,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C07",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.28,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C08",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.28,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C09",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.22,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "atencao"
+        },
+        {
+          "alvo": "C10",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.27,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C11",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.27,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C12",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.25,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C13",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.24,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C14",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.27,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C15",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.24,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C16",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.27,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C17",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.28,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C18",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.25,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C19",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.27,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C20",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.29,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C21",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.25,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C22",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.3,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C23",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.27,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C24",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.29,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C25",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.31,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C26",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.24,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C27",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.27,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C28",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.24,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C29",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.25,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C30",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.3,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C31",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.29,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C32",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.28,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        }
+      ],
+      "serrilha": {
+        "perdaAlturaPico": 33.0,
+        "unidade": "%",
+        "limite": 35.0,
+        "alvo": "SB1",
+        "status": "atencao"
+      },
+      "planicidade": {
+        "valor": 0.05,
+        "limite": 0.1,
+        "unidade": "mm",
+        "status": "ok"
+      },
+      "achados": [
+        {
+          "id": "A0",
+          "tipo": "desgaste_serrilha",
+          "rotulo": "Serrilha de selagem — perda de altura de pico",
+          "score": 0.71,
+          "severidade": "atencao",
+          "alvo": "SB1",
+          "detalhe": "33% de perda — acima do patamar de atenção"
+        }
+      ],
+      "estado": "desgastado",
+      "concordanciaPainel": null,
+      "avaliadoresPainel": null,
+      "decisaoHumana": {
+        "usuario": "Líder de ferramentaria · turno C",
+        "decisao": "aprovar",
+        "data": "2026-07-28T08:44:00",
+        "observacao": "Liberada com acompanhamento; reavaliar em 150k golpes."
+      }
+    },
+    {
+      "id": "MED-FS0192-004",
+      "itemSerial": "FS-0192",
+      "data": "2026-09-07T14:32:00",
+      "rig": "EMB-01",
+      "rigDescricao": "gabarito fixo + backlight + lente telecêntrica",
+      "calibracao": {
+        "certificado": "LOC-2026-0413",
+        "validade": "2027-02-28",
+        "rastreavel": true
+      },
+      "ciclosNaMedicao": 812400,
+      "cotas": [
+        {
+          "alvo": "C01",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.26,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C02",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.28,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C03",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.27,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C04",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.24,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C05",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.26,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C06",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.12,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "fora"
+        },
+        {
+          "alvo": "C07",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.27,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C08",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.23,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C09",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.26,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C10",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.27,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C11",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.21,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "atencao"
+        },
+        {
+          "alvo": "C12",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.29,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C13",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.25,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C14",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.28,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C15",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.3,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C16",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.28,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C17",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.28,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C18",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.3,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C19",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.32,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C20",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.3,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C21",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.27,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C22",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.23,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C23",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.25,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C24",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.39,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "atencao"
+        },
+        {
+          "alvo": "C25",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.27,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C26",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.26,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C27",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.26,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C28",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.27,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C29",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.29,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C30",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.28,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C31",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.25,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        },
+        {
+          "alvo": "C32",
+          "tipo": "profundidade_cavidade",
+          "valor": 4.3,
+          "nominal": 4.3,
+          "tolerancia": 0.1,
+          "unidade": "mm",
+          "status": "ok"
+        }
+      ],
+      "serrilha": {
+        "perdaAlturaPico": 41.0,
+        "unidade": "%",
+        "limite": 35.0,
+        "alvo": "SB1",
+        "status": "fora"
+      },
+      "planicidade": {
+        "valor": 0.06,
+        "limite": 0.1,
+        "unidade": "mm",
+        "status": "ok"
+      },
+      "achados": [
+        {
+          "id": "A1",
+          "tipo": "desgaste_serrilha",
+          "rotulo": "Serrilha de selagem — perda de altura de pico",
+          "score": 0.93,
+          "severidade": "condenar",
+          "alvo": "SB1",
+          "detalhe": "41% de perda de altura de pico em relação à peça nova"
+        },
+        {
+          "id": "A2",
+          "tipo": "ranhura",
+          "rotulo": "Ranhura transversal — risco de vazamento",
+          "score": 0.84,
+          "severidade": "atencao",
+          "alvo": "C11,C12",
+          "detalhe": "comprimento 38 mm, cruza 2 cavidades",
+          "poligono": [
+            [
+              0.402,
+              0.372
+            ],
+            [
+              0.596,
+              0.398
+            ],
+            [
+              0.598,
+              0.418
+            ],
+            [
+              0.404,
+              0.392
+            ]
+          ]
+        },
+        {
+          "id": "A3",
+          "tipo": "rebarba",
+          "rotulo": "Borda de cavidade — rebarba",
+          "score": 0.78,
+          "severidade": "atencao",
+          "alvo": "C20",
+          "detalhe": "2 pontos de rebarba na borda"
+        },
+        {
+          "id": "A4",
+          "tipo": "incrustacao",
+          "rotulo": "Incrustação leve no canal de vácuo",
+          "score": 0.41,
+          "severidade": "observar",
+          "alvo": "C29",
+          "detalhe": "abaixo do limiar de decisão — registrado para acompanhamento"
+        }
+      ],
+      "estado": "desgastado",
+      "concordanciaPainel": 94,
+      "avaliadoresPainel": 3,
+      "decisaoHumana": null
+    }
+  ],
+  "tendencia": {
+    "itemSerial": "FS-0192",
+    "degrau": 2,
+    "metodo": "extrapolação linear do desgaste medido contra ciclos acumulados",
+    "avisoDegrau": "Degrau 2 da escada analítica. Não é predição: é tendência sobre 4 medições. O modelo preditivo (degrau 4) exige ~18 meses de base histórica e é entregável da Fase 4.",
+    "inclinacaoPorCemMilGolpes": 9.0,
+    "unidadeInclinacao": "% de perda de altura de pico por 100 mil golpes",
+    "limiteCondenacao": 45.0,
+    "vidaRemanescenteGolpes": 60000,
+    "pontos": [
+      {
+        "ciclos": 0,
+        "desgaste": 0.0
+      },
+      {
+        "ciclos": 214800,
+        "desgaste": 12.0
+      },
+      {
+        "ciclos": 438100,
+        "desgaste": 23.0
+      },
+      {
+        "ciclos": 651300,
+        "desgaste": 33.0
+      },
+      {
+        "ciclos": 812400,
+        "desgaste": 41.0
+      }
+    ]
+  },
+  "movimentacoes": [
+    {
+      "id": "MOV-0036",
+      "itemSerial": "FF-0205",
+      "tipo": "check-out",
+      "data": "2026-09-07T22:59:00",
+      "op": "OP-4477461",
+      "maquina": "BL-04",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0171",
+      "itemSerial": "FC-0193",
+      "tipo": "check-out",
+      "data": "2026-09-07T22:21:00",
+      "op": "OP-4472631",
+      "maquina": "BL-05",
+      "produto": "Engov",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0178",
+      "itemSerial": "FC-0211",
+      "tipo": "check-out",
+      "data": "2026-09-07T22:16:00",
+      "op": "OP-4479404",
+      "maquina": "BL-05",
+      "produto": "Alivium",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0037",
+      "itemSerial": "FF-0205",
+      "tipo": "check-in",
+      "data": "2026-09-07T21:49:00",
+      "op": "OP-4477461",
+      "maquina": "BL-04",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno C",
+      "motivo": "fim de campanha"
+    },
+    {
+      "id": "MOV-0097",
+      "itemSerial": "FS-0108",
+      "tipo": "check-in",
+      "data": "2026-09-07T21:45:00",
+      "op": "OP-4479787",
+      "maquina": "BL-01",
+      "produto": "Alivium",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0063",
+      "itemSerial": "FA-0137",
+      "tipo": "check-in",
+      "data": "2026-09-07T21:19:00",
+      "op": "OP-4477967",
+      "maquina": "BL-02",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno A",
+      "motivo": "fim de campanha"
+    },
+    {
+      "id": "MOV-0096",
+      "itemSerial": "FS-0108",
+      "tipo": "check-out",
+      "data": "2026-09-07T14:40:00",
+      "op": "OP-4479787",
+      "maquina": "BL-01",
+      "produto": "Alivium",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0062",
+      "itemSerial": "FA-0137",
+      "tipo": "check-out",
+      "data": "2026-09-07T06:05:00",
+      "op": "OP-4477967",
+      "maquina": "BL-02",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0172",
+      "itemSerial": "FC-0193",
+      "tipo": "check-in",
+      "data": "2026-09-07T05:37:00",
+      "op": "OP-4472631",
+      "maquina": "BL-05",
+      "produto": "Engov",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0179",
+      "itemSerial": "FC-0211",
+      "tipo": "check-in",
+      "data": "2026-09-07T05:02:00",
+      "op": "OP-4479404",
+      "maquina": "BL-05",
+      "produto": "Alivium",
+      "operador": "Operador · turno C",
+      "motivo": "fim de campanha"
+    },
+    {
+      "id": "MOV-0110",
+      "itemSerial": "FS-0189",
+      "tipo": "check-out",
+      "data": "2026-09-06T22:27:00",
+      "op": "OP-4471939",
+      "maquina": "BL-03",
+      "produto": "Engov",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0185",
+      "itemSerial": "FC-0244",
+      "tipo": "check-in",
+      "data": "2026-09-06T13:40:00",
+      "op": "OP-4479247",
+      "maquina": "BL-06",
+      "produto": "Benegrip",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0184",
+      "itemSerial": "FC-0244",
+      "tipo": "check-out",
+      "data": "2026-09-06T06:56:00",
+      "op": "OP-4479247",
+      "maquina": "BL-06",
+      "produto": "Benegrip",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0033",
+      "itemSerial": "FF-0205",
+      "tipo": "check-out",
+      "data": "2026-09-05T22:41:00",
+      "op": "OP-4475310",
+      "maquina": "BL-04",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0098",
+      "itemSerial": "FS-0128",
+      "tipo": "check-out",
+      "data": "2026-09-05T14:36:00",
+      "op": "OP-4473807",
+      "maquina": "BL-01",
+      "produto": "Benegrip",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0180",
+      "itemSerial": "FC-0228",
+      "tipo": "check-out",
+      "data": "2026-09-05T14:13:00",
+      "op": "OP-4474200",
+      "maquina": "BL-06",
+      "produto": "Alivium",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0181",
+      "itemSerial": "FC-0228",
+      "tipo": "check-in",
+      "data": "2026-09-05T13:17:00",
+      "op": "OP-4474200",
+      "maquina": "BL-06",
+      "produto": "Alivium",
+      "operador": "Operador · turno C",
+      "motivo": "troca em produção"
+    },
+    {
+      "id": "MOV-0099",
+      "itemSerial": "FS-0128",
+      "tipo": "check-in",
+      "data": "2026-09-05T05:12:00",
+      "op": "OP-4473807",
+      "maquina": "BL-01",
+      "produto": "Benegrip",
+      "operador": "Operador · turno C",
+      "motivo": "fim de campanha"
+    },
+    {
+      "id": "MOV-0014",
+      "itemSerial": "FF-0129",
+      "tipo": "check-out",
+      "data": "2026-09-04T22:12:00",
+      "op": "OP-4470251",
+      "maquina": "BL-02",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0004",
+      "itemSerial": "FF-0106",
+      "tipo": "check-in",
+      "data": "2026-09-04T21:23:00",
+      "op": "OP-4473593",
+      "maquina": "BL-01",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0003",
+      "itemSerial": "FF-0106",
+      "tipo": "check-out",
+      "data": "2026-09-04T14:43:00",
+      "op": "OP-4473593",
+      "maquina": "BL-01",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0015",
+      "itemSerial": "FF-0129",
+      "tipo": "check-in",
+      "data": "2026-09-04T13:58:00",
+      "op": "OP-4470251",
+      "maquina": "BL-02",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno B",
+      "motivo": "troca de formato"
+    },
+    {
+      "id": "MOV-0131",
+      "itemSerial": "FS-0258",
+      "tipo": "check-out",
+      "data": "2026-09-03T22:41:00",
+      "op": "OP-4478592",
+      "maquina": "BL-06",
+      "produto": "Alivium",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0047",
+      "itemSerial": "FF-0230",
+      "tipo": "check-in",
+      "data": "2026-09-03T21:59:00",
+      "op": "OP-4477909",
+      "maquina": "BL-06",
+      "produto": "Engov",
+      "operador": "Operador · turno A",
+      "motivo": "troca em produção"
+    },
+    {
+      "id": "MOV-0072",
+      "itemSerial": "FA-0165",
+      "tipo": "check-out",
+      "data": "2026-09-03T14:53:00",
+      "op": "OP-4479512",
+      "maquina": "BL-03",
+      "produto": "Engov",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0073",
+      "itemSerial": "FA-0165",
+      "tipo": "check-in",
+      "data": "2026-09-03T13:57:00",
+      "op": "OP-4479512",
+      "maquina": "BL-03",
+      "produto": "Engov",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0046",
+      "itemSerial": "FF-0230",
+      "tipo": "check-out",
+      "data": "2026-09-03T06:30:00",
+      "op": "OP-4477909",
+      "maquina": "BL-06",
+      "produto": "Engov",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0194",
+      "itemSerial": "PS-0125",
+      "tipo": "check-out",
+      "data": "2026-09-03T06:14:00",
+      "op": "OP-4479651",
+      "maquina": "CP-02",
+      "produto": "—",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0111",
+      "itemSerial": "FS-0208",
+      "tipo": "check-out",
+      "data": "2026-09-03T06:09:00",
+      "op": "OP-4476023",
+      "maquina": "BL-04",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0132",
+      "itemSerial": "FS-0258",
+      "tipo": "check-in",
+      "data": "2026-09-03T05:58:00",
+      "op": "OP-4478592",
+      "maquina": "BL-06",
+      "produto": "Alivium",
+      "operador": "Operador · turno A",
+      "motivo": "troca em produção"
+    },
+    {
+      "id": "MOV-0199",
+      "itemSerial": "PS-0130",
+      "tipo": "check-out",
+      "data": "2026-09-02T22:55:00",
+      "op": "OP-4475778",
+      "maquina": "CP-03",
+      "produto": "—",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0190",
+      "itemSerial": "PS-0107",
+      "tipo": "check-out",
+      "data": "2026-09-02T22:05:00",
+      "op": "OP-4477521",
+      "maquina": "CP-01",
+      "produto": "—",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0060",
+      "itemSerial": "FA-0121",
+      "tipo": "check-out",
+      "data": "2026-09-02T14:13:00",
+      "op": "OP-4473231",
+      "maquina": "BL-01",
+      "produto": "Benegrip",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0124",
+      "itemSerial": "FS-0223",
+      "tipo": "check-out",
+      "data": "2026-09-02T14:07:00",
+      "op": "OP-4477907",
+      "maquina": "BL-05",
+      "produto": "Benegrip",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0200",
+      "itemSerial": "PS-0130",
+      "tipo": "check-in",
+      "data": "2026-09-02T13:16:00",
+      "op": "OP-4475778",
+      "maquina": "CP-03",
+      "produto": "—",
+      "operador": "Operador · turno C",
+      "motivo": "fim de campanha"
+    },
+    {
+      "id": "MOV-0191",
+      "itemSerial": "PS-0107",
+      "tipo": "check-in",
+      "data": "2026-09-02T13:08:00",
+      "op": "OP-4477521",
+      "maquina": "CP-01",
+      "produto": "—",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0156",
+      "itemSerial": "FC-0154",
+      "tipo": "check-out",
+      "data": "2026-09-02T06:08:00",
+      "op": "OP-4470048",
+      "maquina": "BL-02",
+      "produto": "Benegrip",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0157",
+      "itemSerial": "FC-0154",
+      "tipo": "check-in",
+      "data": "2026-09-02T05:52:00",
+      "op": "OP-4470048",
+      "maquina": "BL-02",
+      "produto": "Benegrip",
+      "operador": "Operador · turno C",
+      "motivo": "troca de formato"
+    },
+    {
+      "id": "MOV-0061",
+      "itemSerial": "FA-0121",
+      "tipo": "check-in",
+      "data": "2026-09-02T05:49:00",
+      "op": "OP-4473231",
+      "maquina": "BL-01",
+      "produto": "Benegrip",
+      "operador": "Operador · turno C",
+      "motivo": "troca em produção"
+    },
+    {
+      "id": "MOV-0125",
+      "itemSerial": "FS-0223",
+      "tipo": "check-in",
+      "data": "2026-09-02T05:03:00",
+      "op": "OP-4477907",
+      "maquina": "BL-05",
+      "produto": "Benegrip",
+      "operador": "Operador · turno C",
+      "motivo": "troca de formato"
+    },
+    {
+      "id": "MOV-0163",
+      "itemSerial": "FC-0170",
+      "tipo": "check-in",
+      "data": "2026-09-01T21:59:00",
+      "op": "OP-4471260",
+      "maquina": "BL-03",
+      "produto": "Alivium",
+      "operador": "Operador · turno A",
+      "motivo": "fim de campanha"
+    },
+    {
+      "id": "MOV-0162",
+      "itemSerial": "FC-0170",
+      "tipo": "check-out",
+      "data": "2026-09-01T14:36:00",
+      "op": "OP-4471260",
+      "maquina": "BL-03",
+      "produto": "Alivium",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0213",
+      "itemSerial": "TG-0134",
+      "tipo": "check-in",
+      "data": "2026-09-01T13:36:00",
+      "op": "OP-4471321",
+      "maquina": "GR-03",
+      "produto": "—",
+      "operador": "Operador · turno B",
+      "motivo": "troca em produção"
+    },
+    {
+      "id": "MOV-0212",
+      "itemSerial": "TG-0134",
+      "tipo": "check-out",
+      "data": "2026-09-01T06:04:00",
+      "op": "OP-4471321",
+      "maquina": "GR-03",
+      "produto": "—",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0012",
+      "itemSerial": "FF-0129",
+      "tipo": "check-out",
+      "data": "2026-08-31T06:51:00",
+      "op": "OP-4479788",
+      "maquina": "BL-02",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0013",
+      "itemSerial": "FF-0129",
+      "tipo": "check-in",
+      "data": "2026-08-31T05:52:00",
+      "op": "OP-4479788",
+      "maquina": "BL-02",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0089",
+      "itemSerial": "FA-0241",
+      "tipo": "check-out",
+      "data": "2026-08-30T22:59:00",
+      "op": "OP-4477770",
+      "maquina": "BL-06",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0090",
+      "itemSerial": "FA-0241",
+      "tipo": "check-in",
+      "data": "2026-08-30T21:44:00",
+      "op": "OP-4477770",
+      "maquina": "BL-06",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0087",
+      "itemSerial": "FA-0231",
+      "tipo": "check-out",
+      "data": "2026-08-30T14:28:00",
+      "op": "OP-4477480",
+      "maquina": "BL-05",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0088",
+      "itemSerial": "FA-0231",
+      "tipo": "check-in",
+      "data": "2026-08-30T05:44:00",
+      "op": "OP-4477480",
+      "maquina": "BL-05",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno A",
+      "motivo": "troca de formato"
+    },
+    {
+      "id": "MOV-0138",
+      "itemSerial": "FS-0276",
+      "tipo": "check-in",
+      "data": "2026-08-29T21:01:00",
+      "op": "OP-4479252",
+      "maquina": "BL-06",
+      "produto": "Benegrip",
+      "operador": "Operador · turno B",
+      "motivo": "troca de formato"
+    },
+    {
+      "id": "MOV-0019",
+      "itemSerial": "FF-0146",
+      "tipo": "check-in",
+      "data": "2026-08-29T13:28:00",
+      "op": "OP-4479937",
+      "maquina": "BL-02",
+      "produto": "Engov",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0018",
+      "itemSerial": "FF-0146",
+      "tipo": "check-out",
+      "data": "2026-08-29T06:13:00",
+      "op": "OP-4479937",
+      "maquina": "BL-02",
+      "produto": "Engov",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0137",
+      "itemSerial": "FS-0276",
+      "tipo": "check-out",
+      "data": "2026-08-29T06:06:00",
+      "op": "OP-4479252",
+      "maquina": "BL-06",
+      "produto": "Benegrip",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0001",
+      "itemSerial": "FS-0192",
+      "tipo": "check-out",
+      "data": "2026-08-28T22:12:00",
+      "op": "OP-4471400",
+      "maquina": "BL-04",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0080",
+      "itemSerial": "FA-0186",
+      "tipo": "check-in",
+      "data": "2026-08-28T21:45:00",
+      "op": "OP-4478899",
+      "maquina": "BL-04",
+      "produto": "Engov",
+      "operador": "Operador · turno C",
+      "motivo": "troca em produção"
+    },
+    {
+      "id": "MOV-0114",
+      "itemSerial": "FS-0208",
+      "tipo": "check-out",
+      "data": "2026-08-28T14:45:00",
+      "op": "OP-4478601",
+      "maquina": "BL-04",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0079",
+      "itemSerial": "FA-0186",
+      "tipo": "check-out",
+      "data": "2026-08-28T14:39:00",
+      "op": "OP-4478899",
+      "maquina": "BL-04",
+      "produto": "Engov",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0115",
+      "itemSerial": "FS-0208",
+      "tipo": "check-in",
+      "data": "2026-08-28T13:44:00",
+      "op": "OP-4478601",
+      "maquina": "BL-04",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno B",
+      "motivo": "troca de formato"
+    },
+    {
+      "id": "MOV-0002",
+      "itemSerial": "FS-0192",
+      "tipo": "check-in",
+      "data": "2026-08-28T13:22:00",
+      "op": "OP-4471400",
+      "maquina": "BL-04",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0139",
+      "itemSerial": "FS-0276",
+      "tipo": "check-out",
+      "data": "2026-08-27T22:12:00",
+      "op": "OP-4470451",
+      "maquina": "BL-06",
+      "produto": "Benegrip",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0140",
+      "itemSerial": "FS-0276",
+      "tipo": "check-in",
+      "data": "2026-08-27T21:49:00",
+      "op": "OP-4470451",
+      "maquina": "BL-06",
+      "produto": "Benegrip",
+      "operador": "Operador · turno C",
+      "motivo": "troca de formato"
+    },
+    {
+      "id": "MOV-0045",
+      "itemSerial": "FF-0221",
+      "tipo": "check-in",
+      "data": "2026-08-27T21:32:00",
+      "op": "OP-4479993",
+      "maquina": "BL-05",
+      "produto": "Benegrip",
+      "operador": "Operador · turno A",
+      "motivo": "fim de campanha"
+    },
+    {
+      "id": "MOV-0048",
+      "itemSerial": "FF-0230",
+      "tipo": "check-out",
+      "data": "2026-08-27T14:32:00",
+      "op": "OP-4472566",
+      "maquina": "BL-06",
+      "produto": "Engov",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0044",
+      "itemSerial": "FF-0221",
+      "tipo": "check-out",
+      "data": "2026-08-27T14:26:00",
+      "op": "OP-4479993",
+      "maquina": "BL-05",
+      "produto": "Benegrip",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0056",
+      "itemSerial": "FF-0249",
+      "tipo": "check-out",
+      "data": "2026-08-27T06:44:00",
+      "op": "OP-4472967",
+      "maquina": "BL-06",
+      "produto": "Alivium",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0122",
+      "itemSerial": "FS-0223",
+      "tipo": "check-out",
+      "data": "2026-08-27T06:41:00",
+      "op": "OP-4472007",
+      "maquina": "BL-05",
+      "produto": "Benegrip",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0057",
+      "itemSerial": "FF-0249",
+      "tipo": "check-in",
+      "data": "2026-08-27T05:49:00",
+      "op": "OP-4472967",
+      "maquina": "BL-06",
+      "produto": "Alivium",
+      "operador": "Operador · turno A",
+      "motivo": "troca de formato"
+    },
+    {
+      "id": "MOV-0123",
+      "itemSerial": "FS-0223",
+      "tipo": "check-in",
+      "data": "2026-08-27T05:47:00",
+      "op": "OP-4472007",
+      "maquina": "BL-05",
+      "produto": "Benegrip",
+      "operador": "Operador · turno A",
+      "motivo": "troca de formato"
+    },
+    {
+      "id": "MOV-0049",
+      "itemSerial": "FF-0230",
+      "tipo": "check-in",
+      "data": "2026-08-27T05:34:00",
+      "op": "OP-4472566",
+      "maquina": "BL-06",
+      "produto": "Engov",
+      "operador": "Operador · turno B",
+      "motivo": "fim de campanha"
+    },
+    {
+      "id": "MOV-0161",
+      "itemSerial": "FC-0159",
+      "tipo": "check-in",
+      "data": "2026-08-26T13:07:00",
+      "op": "OP-4472444",
+      "maquina": "BL-03",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno B",
+      "motivo": "fim de campanha"
+    },
+    {
+      "id": "MOV-0214",
+      "itemSerial": "TG-0153",
+      "tipo": "check-out",
+      "data": "2026-08-26T06:48:00",
+      "op": "OP-4472277",
+      "maquina": "GR-04",
+      "produto": "—",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0141",
+      "itemSerial": "FC-0103",
+      "tipo": "check-out",
+      "data": "2026-08-26T06:15:00",
+      "op": "OP-4478344",
+      "maquina": "BL-01",
+      "produto": "Benegrip",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0160",
+      "itemSerial": "FC-0159",
+      "tipo": "check-out",
+      "data": "2026-08-26T06:03:00",
+      "op": "OP-4472444",
+      "maquina": "BL-03",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0142",
+      "itemSerial": "FC-0103",
+      "tipo": "check-in",
+      "data": "2026-08-26T05:40:00",
+      "op": "OP-4478344",
+      "maquina": "BL-01",
+      "produto": "Benegrip",
+      "operador": "Operador · turno B",
+      "motivo": "troca em produção"
+    },
+    {
+      "id": "MOV-0215",
+      "itemSerial": "TG-0153",
+      "tipo": "check-in",
+      "data": "2026-08-26T05:27:00",
+      "op": "OP-4472277",
+      "maquina": "GR-04",
+      "produto": "—",
+      "operador": "Operador · turno B",
+      "motivo": "fim de campanha"
+    },
+    {
+      "id": "MOV-0120",
+      "itemSerial": "FS-0212",
+      "tipo": "check-out",
+      "data": "2026-08-24T22:19:00",
+      "op": "OP-4476813",
+      "maquina": "BL-04",
+      "produto": "Engov",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0121",
+      "itemSerial": "FS-0212",
+      "tipo": "check-in",
+      "data": "2026-08-24T05:38:00",
+      "op": "OP-4476813",
+      "maquina": "BL-04",
+      "produto": "Engov",
+      "operador": "Operador · turno C",
+      "motivo": "troca em produção"
+    },
+    {
+      "id": "MOV-0031",
+      "itemSerial": "FF-0200",
+      "tipo": "check-out",
+      "data": "2026-08-23T22:27:00",
+      "op": "OP-4477104",
+      "maquina": "BL-04",
+      "produto": "Engov",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0148",
+      "itemSerial": "FC-0115",
+      "tipo": "check-in",
+      "data": "2026-08-23T21:43:00",
+      "op": "OP-4470252",
+      "maquina": "BL-01",
+      "produto": "Alivium",
+      "operador": "Operador · turno C",
+      "motivo": "fim de campanha"
+    },
+    {
+      "id": "MOV-0147",
+      "itemSerial": "FC-0115",
+      "tipo": "check-out",
+      "data": "2026-08-23T06:27:00",
+      "op": "OP-4470252",
+      "maquina": "BL-01",
+      "produto": "Alivium",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0032",
+      "itemSerial": "FF-0200",
+      "tipo": "check-in",
+      "data": "2026-08-23T05:45:00",
+      "op": "OP-4477104",
+      "maquina": "BL-04",
+      "produto": "Engov",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0076",
+      "itemSerial": "FA-0172",
+      "tipo": "check-out",
+      "data": "2026-08-22T22:55:00",
+      "op": "OP-4472251",
+      "maquina": "BL-03",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0064",
+      "itemSerial": "FA-0137",
+      "tipo": "check-out",
+      "data": "2026-08-22T22:27:00",
+      "op": "OP-4471785",
+      "maquina": "BL-02",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0008",
+      "itemSerial": "FF-0112",
+      "tipo": "check-out",
+      "data": "2026-08-22T22:12:00",
+      "op": "OP-4475057",
+      "maquina": "BL-01",
+      "produto": "Engov",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0106",
+      "itemSerial": "FS-0151",
+      "tipo": "check-in",
+      "data": "2026-08-22T21:56:00",
+      "op": "OP-4472740",
+      "maquina": "BL-02",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno B",
+      "motivo": "fim de campanha"
+    },
+    {
+      "id": "MOV-0065",
+      "itemSerial": "FA-0137",
+      "tipo": "check-in",
+      "data": "2026-08-22T21:21:00",
+      "op": "OP-4471785",
+      "maquina": "BL-02",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno C",
+      "motivo": "troca de formato"
+    },
+    {
+      "id": "MOV-0105",
+      "itemSerial": "FS-0151",
+      "tipo": "check-out",
+      "data": "2026-08-22T14:34:00",
+      "op": "OP-4472740",
+      "maquina": "BL-02",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0077",
+      "itemSerial": "FA-0172",
+      "tipo": "check-in",
+      "data": "2026-08-22T13:40:00",
+      "op": "OP-4472251",
+      "maquina": "BL-03",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno B",
+      "motivo": "troca em produção"
+    },
+    {
+      "id": "MOV-0009",
+      "itemSerial": "FF-0112",
+      "tipo": "check-in",
+      "data": "2026-08-22T13:35:00",
+      "op": "OP-4475057",
+      "maquina": "BL-01",
+      "produto": "Engov",
+      "operador": "Operador · turno B",
+      "motivo": "troca de formato"
+    },
+    {
+      "id": "MOV-0126",
+      "itemSerial": "FS-0243",
+      "tipo": "check-out",
+      "data": "2026-08-21T22:08:00",
+      "op": "OP-4472148",
+      "maquina": "BL-05",
+      "produto": "Engov",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0127",
+      "itemSerial": "FS-0243",
+      "tipo": "check-in",
+      "data": "2026-08-21T21:07:00",
+      "op": "OP-4472148",
+      "maquina": "BL-05",
+      "produto": "Engov",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0104",
+      "itemSerial": "FS-0151",
+      "tipo": "check-out",
+      "data": "2026-08-21T14:45:00",
+      "op": "OP-4472472",
+      "maquina": "BL-02",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0119",
+      "itemSerial": "FS-0212",
+      "tipo": "check-in",
+      "data": "2026-08-20T21:59:00",
+      "op": "OP-4474625",
+      "maquina": "BL-04",
+      "produto": "Engov",
+      "operador": "Operador · turno C",
+      "motivo": "troca em produção"
+    },
+    {
+      "id": "MOV-0100",
+      "itemSerial": "FS-0128",
+      "tipo": "check-out",
+      "data": "2026-08-20T14:45:00",
+      "op": "OP-4473013",
+      "maquina": "BL-01",
+      "produto": "Benegrip",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0206",
+      "itemSerial": "TG-0118",
+      "tipo": "check-in",
+      "data": "2026-08-20T13:53:00",
+      "op": "OP-4476480",
+      "maquina": "GR-01",
+      "produto": "—",
+      "operador": "Operador · turno A",
+      "motivo": "troca em produção"
+    },
+    {
+      "id": "MOV-0093",
+      "itemSerial": "FA-0248",
+      "tipo": "check-in",
+      "data": "2026-08-20T13:08:00",
+      "op": "OP-4477590",
+      "maquina": "BL-06",
+      "produto": "Engov",
+      "operador": "Operador · turno B",
+      "motivo": "fim de campanha"
+    },
+    {
+      "id": "MOV-0118",
+      "itemSerial": "FS-0212",
+      "tipo": "check-out",
+      "data": "2026-08-20T06:32:00",
+      "op": "OP-4474625",
+      "maquina": "BL-04",
+      "produto": "Engov",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0205",
+      "itemSerial": "TG-0118",
+      "tipo": "check-out",
+      "data": "2026-08-20T06:30:00",
+      "op": "OP-4476480",
+      "maquina": "GR-01",
+      "produto": "—",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0092",
+      "itemSerial": "FA-0248",
+      "tipo": "check-out",
+      "data": "2026-08-20T06:26:00",
+      "op": "OP-4477590",
+      "maquina": "BL-06",
+      "produto": "Engov",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0101",
+      "itemSerial": "FS-0128",
+      "tipo": "check-in",
+      "data": "2026-08-20T05:52:00",
+      "op": "OP-4473013",
+      "maquina": "BL-01",
+      "produto": "Benegrip",
+      "operador": "Operador · turno A",
+      "motivo": "fim de campanha"
+    },
+    {
+      "id": "MOV-0075",
+      "itemSerial": "FA-0172",
+      "tipo": "check-in",
+      "data": "2026-08-19T21:13:00",
+      "op": "OP-4473979",
+      "maquina": "BL-03",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0074",
+      "itemSerial": "FA-0172",
+      "tipo": "check-out",
+      "data": "2026-08-19T14:46:00",
+      "op": "OP-4473979",
+      "maquina": "BL-03",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0201",
+      "itemSerial": "PS-0138",
+      "tipo": "check-out",
+      "data": "2026-08-19T14:09:00",
+      "op": "OP-4477578",
+      "maquina": "CP-04",
+      "produto": "—",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0198",
+      "itemSerial": "PS-0130",
+      "tipo": "check-in",
+      "data": "2026-08-19T13:51:00",
+      "op": "OP-4470930",
+      "maquina": "CP-03",
+      "produto": "—",
+      "operador": "Operador · turno C",
+      "motivo": "troca de formato"
+    },
+    {
+      "id": "MOV-0165",
+      "itemSerial": "FC-0170",
+      "tipo": "check-in",
+      "data": "2026-08-19T13:30:00",
+      "op": "OP-4479528",
+      "maquina": "BL-03",
+      "produto": "Alivium",
+      "operador": "Operador · turno C",
+      "motivo": "troca em produção"
+    },
+    {
+      "id": "MOV-0164",
+      "itemSerial": "FC-0170",
+      "tipo": "check-out",
+      "data": "2026-08-19T06:23:00",
+      "op": "OP-4479528",
+      "maquina": "BL-03",
+      "produto": "Alivium",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0005",
+      "itemSerial": "FF-0106",
+      "tipo": "check-out",
+      "data": "2026-08-19T06:21:00",
+      "op": "OP-4471516",
+      "maquina": "BL-01",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0197",
+      "itemSerial": "PS-0130",
+      "tipo": "check-out",
+      "data": "2026-08-19T06:10:00",
+      "op": "OP-4470930",
+      "maquina": "CP-03",
+      "produto": "—",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0094",
+      "itemSerial": "FS-0108",
+      "tipo": "check-out",
+      "data": "2026-08-18T22:51:00",
+      "op": "OP-4472062",
+      "maquina": "BL-01",
+      "produto": "Alivium",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0023",
+      "itemSerial": "FF-0164",
+      "tipo": "check-in",
+      "data": "2026-08-18T13:56:00",
+      "op": "OP-4474647",
+      "maquina": "BL-03",
+      "produto": "Alivium",
+      "operador": "Operador · turno A",
+      "motivo": "fim de campanha"
+    },
+    {
+      "id": "MOV-0168",
+      "itemSerial": "FC-0186",
+      "tipo": "check-out",
+      "data": "2026-08-18T06:35:00",
+      "op": "OP-4470313",
+      "maquina": "BL-04",
+      "produto": "Engov",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0022",
+      "itemSerial": "FF-0164",
+      "tipo": "check-out",
+      "data": "2026-08-18T06:32:00",
+      "op": "OP-4474647",
+      "maquina": "BL-03",
+      "produto": "Alivium",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0095",
+      "itemSerial": "FS-0108",
+      "tipo": "check-in",
+      "data": "2026-08-18T05:00:00",
+      "op": "OP-4472062",
+      "maquina": "BL-01",
+      "produto": "Alivium",
+      "operador": "Operador · turno B",
+      "motivo": "troca em produção"
+    },
+    {
+      "id": "MOV-0129",
+      "itemSerial": "FS-0243",
+      "tipo": "check-out",
+      "data": "2026-08-17T14:45:00",
+      "op": "OP-4478665",
+      "maquina": "BL-05",
+      "produto": "Engov",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0030",
+      "itemSerial": "FF-0182",
+      "tipo": "check-out",
+      "data": "2026-08-17T06:52:00",
+      "op": "OP-4473795",
+      "maquina": "BL-03",
+      "produto": "Engov",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0130",
+      "itemSerial": "FS-0243",
+      "tipo": "check-in",
+      "data": "2026-08-17T05:36:00",
+      "op": "OP-4478665",
+      "maquina": "BL-05",
+      "produto": "Engov",
+      "operador": "Operador · turno A",
+      "motivo": "troca em produção"
+    },
+    {
+      "id": "MOV-0058",
+      "itemSerial": "FA-0107",
+      "tipo": "check-out",
+      "data": "2026-08-16T22:19:00",
+      "op": "OP-4471291",
+      "maquina": "BL-01",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0059",
+      "itemSerial": "FA-0107",
+      "tipo": "check-in",
+      "data": "2026-08-16T21:11:00",
+      "op": "OP-4471291",
+      "maquina": "BL-01",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno A",
+      "motivo": "troca de formato"
+    },
+    {
+      "id": "MOV-0091",
+      "itemSerial": "FA-0241",
+      "tipo": "check-out",
+      "data": "2026-08-15T22:46:00",
+      "op": "OP-4470260",
+      "maquina": "BL-06",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0016",
+      "itemSerial": "FF-0146",
+      "tipo": "check-out",
+      "data": "2026-08-15T22:35:00",
+      "op": "OP-4474816",
+      "maquina": "BL-02",
+      "produto": "Engov",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0116",
+      "itemSerial": "FS-0212",
+      "tipo": "check-out",
+      "data": "2026-08-15T22:16:00",
+      "op": "OP-4479567",
+      "maquina": "BL-04",
+      "produto": "Engov",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0117",
+      "itemSerial": "FS-0212",
+      "tipo": "check-in",
+      "data": "2026-08-15T21:50:00",
+      "op": "OP-4479567",
+      "maquina": "BL-04",
+      "produto": "Engov",
+      "operador": "Operador · turno C",
+      "motivo": "fim de campanha"
+    },
+    {
+      "id": "MOV-0017",
+      "itemSerial": "FF-0146",
+      "tipo": "check-in",
+      "data": "2026-08-15T13:24:00",
+      "op": "OP-4474816",
+      "maquina": "BL-02",
+      "produto": "Engov",
+      "operador": "Operador · turno B",
+      "motivo": "troca em produção"
+    },
+    {
+      "id": "MOV-0020",
+      "itemSerial": "FF-0164",
+      "tipo": "check-out",
+      "data": "2026-08-15T06:26:00",
+      "op": "OP-4476297",
+      "maquina": "BL-03",
+      "produto": "Alivium",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0021",
+      "itemSerial": "FF-0164",
+      "tipo": "check-in",
+      "data": "2026-08-15T05:19:00",
+      "op": "OP-4476297",
+      "maquina": "BL-03",
+      "produto": "Alivium",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0173",
+      "itemSerial": "FC-0193",
+      "tipo": "check-out",
+      "data": "2026-08-14T06:23:00",
+      "op": "OP-4478376",
+      "maquina": "BL-05",
+      "produto": "Engov",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0026",
+      "itemSerial": "FF-0182",
+      "tipo": "check-out",
+      "data": "2026-08-13T22:14:00",
+      "op": "OP-4473701",
+      "maquina": "BL-03",
+      "produto": "Engov",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0025",
+      "itemSerial": "FF-0164",
+      "tipo": "check-in",
+      "data": "2026-08-13T21:59:00",
+      "op": "OP-4477747",
+      "maquina": "BL-03",
+      "produto": "Alivium",
+      "operador": "Operador · turno A",
+      "motivo": "fim de campanha"
+    },
+    {
+      "id": "MOV-0024",
+      "itemSerial": "FF-0164",
+      "tipo": "check-out",
+      "data": "2026-08-13T14:21:00",
+      "op": "OP-4477747",
+      "maquina": "BL-03",
+      "produto": "Alivium",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0102",
+      "itemSerial": "FS-0134",
+      "tipo": "check-out",
+      "data": "2026-08-13T06:16:00",
+      "op": "OP-4477575",
+      "maquina": "BL-02",
+      "produto": "Engov",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0103",
+      "itemSerial": "FS-0134",
+      "tipo": "check-in",
+      "data": "2026-08-13T05:33:00",
+      "op": "OP-4477575",
+      "maquina": "BL-02",
+      "produto": "Engov",
+      "operador": "Operador · turno A",
+      "motivo": "troca em produção"
+    },
+    {
+      "id": "MOV-0027",
+      "itemSerial": "FF-0182",
+      "tipo": "check-in",
+      "data": "2026-08-13T05:23:00",
+      "op": "OP-4473701",
+      "maquina": "BL-03",
+      "produto": "Engov",
+      "operador": "Operador · turno B",
+      "motivo": "troca em produção"
+    },
+    {
+      "id": "MOV-0153",
+      "itemSerial": "FC-0136",
+      "tipo": "check-out",
+      "data": "2026-08-12T22:28:00",
+      "op": "OP-4477092",
+      "maquina": "BL-02",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0174",
+      "itemSerial": "FC-0211",
+      "tipo": "check-out",
+      "data": "2026-08-12T22:13:00",
+      "op": "OP-4476900",
+      "maquina": "BL-05",
+      "produto": "Alivium",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0175",
+      "itemSerial": "FC-0211",
+      "tipo": "check-in",
+      "data": "2026-08-12T21:30:00",
+      "op": "OP-4476900",
+      "maquina": "BL-05",
+      "produto": "Alivium",
+      "operador": "Operador · turno C",
+      "motivo": "troca em produção"
+    },
+    {
+      "id": "MOV-0068",
+      "itemSerial": "FA-0145",
+      "tipo": "check-out",
+      "data": "2026-08-12T14:06:00",
+      "op": "OP-4477506",
+      "maquina": "BL-02",
+      "produto": "Alivium",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0069",
+      "itemSerial": "FA-0145",
+      "tipo": "check-in",
+      "data": "2026-08-12T05:01:00",
+      "op": "OP-4477506",
+      "maquina": "BL-02",
+      "produto": "Alivium",
+      "operador": "Operador · turno C",
+      "motivo": "fim de campanha"
+    },
+    {
+      "id": "MOV-0051",
+      "itemSerial": "FF-0230",
+      "tipo": "check-in",
+      "data": "2026-08-11T21:28:00",
+      "op": "OP-4473039",
+      "maquina": "BL-06",
+      "produto": "Engov",
+      "operador": "Operador · turno A",
+      "motivo": "troca de formato"
+    },
+    {
+      "id": "MOV-0159",
+      "itemSerial": "FC-0159",
+      "tipo": "check-in",
+      "data": "2026-08-11T21:27:00",
+      "op": "OP-4470312",
+      "maquina": "BL-03",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno C",
+      "motivo": "fim de campanha"
+    },
+    {
+      "id": "MOV-0158",
+      "itemSerial": "FC-0159",
+      "tipo": "check-out",
+      "data": "2026-08-11T14:16:00",
+      "op": "OP-4470312",
+      "maquina": "BL-03",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0050",
+      "itemSerial": "FF-0230",
+      "tipo": "check-out",
+      "data": "2026-08-11T14:14:00",
+      "op": "OP-4473039",
+      "maquina": "BL-06",
+      "produto": "Engov",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0182",
+      "itemSerial": "FC-0244",
+      "tipo": "check-out",
+      "data": "2026-08-10T14:23:00",
+      "op": "OP-4476229",
+      "maquina": "BL-06",
+      "produto": "Benegrip",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0183",
+      "itemSerial": "FC-0244",
+      "tipo": "check-in",
+      "data": "2026-08-10T13:33:00",
+      "op": "OP-4476229",
+      "maquina": "BL-06",
+      "produto": "Benegrip",
+      "operador": "Operador · turno B",
+      "motivo": "fim de campanha"
+    },
+    {
+      "id": "MOV-0170",
+      "itemSerial": "FC-0186",
+      "tipo": "check-in",
+      "data": "2026-08-10T13:16:00",
+      "op": "OP-4474325",
+      "maquina": "BL-04",
+      "produto": "Engov",
+      "operador": "Operador · turno A",
+      "motivo": "troca em produção"
+    },
+    {
+      "id": "MOV-0146",
+      "itemSerial": "FC-0103",
+      "tipo": "check-in",
+      "data": "2026-08-10T13:07:00",
+      "op": "OP-4473990",
+      "maquina": "BL-01",
+      "produto": "Benegrip",
+      "operador": "Operador · turno C",
+      "motivo": "troca em produção"
+    },
+    {
+      "id": "MOV-0145",
+      "itemSerial": "FC-0103",
+      "tipo": "check-out",
+      "data": "2026-08-10T06:41:00",
+      "op": "OP-4473990",
+      "maquina": "BL-01",
+      "produto": "Benegrip",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0169",
+      "itemSerial": "FC-0186",
+      "tipo": "check-out",
+      "data": "2026-08-10T06:21:00",
+      "op": "OP-4474325",
+      "maquina": "BL-04",
+      "produto": "Engov",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0207",
+      "itemSerial": "TG-0121",
+      "tipo": "check-out",
+      "data": "2026-08-09T06:22:00",
+      "op": "OP-4470214",
+      "maquina": "GR-02",
+      "produto": "—",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0203",
+      "itemSerial": "TG-0118",
+      "tipo": "check-out",
+      "data": "2026-08-07T22:53:00",
+      "op": "OP-4473119",
+      "maquina": "GR-01",
+      "produto": "—",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0154",
+      "itemSerial": "FC-0154",
+      "tipo": "check-out",
+      "data": "2026-08-07T22:46:00",
+      "op": "OP-4477804",
+      "maquina": "BL-02",
+      "produto": "Benegrip",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0054",
+      "itemSerial": "FF-0249",
+      "tipo": "check-out",
+      "data": "2026-08-07T22:14:00",
+      "op": "OP-4478956",
+      "maquina": "BL-06",
+      "produto": "Alivium",
+      "operador": "Operador · turno B",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0204",
+      "itemSerial": "TG-0118",
+      "tipo": "check-in",
+      "data": "2026-08-07T21:02:00",
+      "op": "OP-4473119",
+      "maquina": "GR-01",
+      "produto": "—",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0055",
+      "itemSerial": "FF-0249",
+      "tipo": "check-in",
+      "data": "2026-08-07T13:57:00",
+      "op": "OP-4478956",
+      "maquina": "BL-06",
+      "produto": "Alivium",
+      "operador": "Operador · turno A",
+      "motivo": "troca em produção"
+    },
+    {
+      "id": "MOV-0155",
+      "itemSerial": "FC-0154",
+      "tipo": "check-in",
+      "data": "2026-08-07T13:52:00",
+      "op": "OP-4477804",
+      "maquina": "BL-02",
+      "produto": "Benegrip",
+      "operador": "Operador · turno B",
+      "motivo": "fim de campanha"
+    },
+    {
+      "id": "MOV-0192",
+      "itemSerial": "PS-0125",
+      "tipo": "check-out",
+      "data": "2026-08-07T06:51:00",
+      "op": "OP-4477629",
+      "maquina": "CP-02",
+      "produto": "—",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0193",
+      "itemSerial": "PS-0125",
+      "tipo": "check-in",
+      "data": "2026-08-07T05:31:00",
+      "op": "OP-4477629",
+      "maquina": "CP-02",
+      "produto": "—",
+      "operador": "Operador · turno B",
+      "motivo": "troca em produção"
+    },
+    {
+      "id": "MOV-0208",
+      "itemSerial": "TG-0121",
+      "tipo": "check-out",
+      "data": "2026-08-06T22:46:00",
+      "op": "OP-4479687",
+      "maquina": "GR-02",
+      "produto": "—",
+      "operador": "Operador · turno C",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0085",
+      "itemSerial": "FA-0231",
+      "tipo": "check-out",
+      "data": "2026-08-06T22:01:00",
+      "op": "OP-4474727",
+      "maquina": "BL-05",
+      "produto": "Neosaldina",
+      "operador": "Operador · turno A",
+      "motivo": null
+    },
+    {
+      "id": "MOV-0108",
+      "itemSerial": "FS-0169",
+      "tipo": "check-in",
+      "data": "2026-08-06T21:55:00",
+      "op": "OP-4475300",
+      "maquina": "BL-03",
+      "produto": "Alivium",
+      "operador": "Operador · turno B",
+      "motivo": "fim de campanha"
+    }
+  ],
+  "desvios": [
+    {
+      "id": "DSV-001",
+      "tipo": "nao_devolvido",
+      "rotulo": "Peça não devolvida",
+      "itemSerial": "FC-0179",
+      "severidade": "alta",
+      "aberto": true,
+      "abertoEm": "2026-09-05T07:12:00",
+      "detalhe": "Check-out registrado há 3 dias, sem check-in. OP encerrada há 2 dias.",
+      "acao": "Localizar na linha e registrar o retorno; se houve troca, informar o motivo.",
+      "responsavel": "Líder de ferramentaria"
+    },
+    {
+      "id": "DSV-002",
+      "tipo": "troca_sem_motivo",
+      "rotulo": "Troca em produção sem motivo registrado",
+      "itemSerial": "FC-0228",
+      "severidade": "media",
+      "aberto": true,
+      "abertoEm": "2026-09-07T22:40:00",
+      "detalhe": "Substituição durante a OP sem campo de motivo preenchido.",
+      "acao": "Completar o registro no check-in; sem o motivo, a causa de desgaste não entra na curva.",
+      "responsavel": "Operador · turno C"
+    },
+    {
+      "id": "DSV-003",
+      "tipo": "ciclos_acima_limite",
+      "rotulo": "Ciclos acima do limite da família",
+      "itemSerial": "TG-0153",
+      "severidade": "alta",
+      "aberto": true,
+      "abertoEm": "2026-09-06T09:05:00",
+      "detalhe": "Contador de ciclos ultrapassou o limite definido para a família sem medição de condição.",
+      "acao": "Bloquear para avaliação no pré-setup do próximo formato.",
+      "responsavel": "Líder de ferramentaria"
+    },
+    {
+      "id": "DSV-004",
+      "tipo": "sem_medicao",
+      "rotulo": "Peça sem medição em dois ciclos de inventário",
+      "itemSerial": "FF-0216",
+      "severidade": "media",
+      "aberto": true,
+      "abertoEm": "2026-09-02T11:30:00",
+      "detalhe": "Sem registro de condição desde a entrada na base serializada.",
+      "acao": "Incluir na fila de avaliação do rig EMB-01.",
+      "responsavel": "Excelência Operacional"
+    },
+    {
+      "id": "DSV-005",
+      "tipo": "divergencia_reserva",
+      "rotulo": "Divergência entre reserva SAP e uso",
+      "itemSerial": "FS-0189",
+      "severidade": "media",
+      "aberto": true,
+      "abertoEm": "2026-09-07T06:50:00",
+      "detalhe": "Reserva emitida para a OP-4471023 e check-out feito com outro item da mesma posição.",
+      "acao": "Confirmar qual peça rodou; a reserva alimenta o contador de ciclos.",
+      "responsavel": "Planejamento"
+    },
+    {
+      "id": "DSV-006",
+      "tipo": "nao_devolvido",
+      "rotulo": "Peça não devolvida",
+      "itemSerial": "PS-0107",
+      "severidade": "baixa",
+      "aberto": false,
+      "abertoEm": "2026-08-27T08:00:00",
+      "fechadoEm": "2026-08-28T16:20:00",
+      "detalhe": "Retorno registrado com 1 dia de atraso.",
+      "acao": "Encerrado.",
+      "responsavel": "Líder de ferramentaria"
+    }
+  ],
+  "ops": [
+    {
+      "op": "OP-4471000",
+      "produto": "Neosaldina",
+      "formato": "NEO-4x8",
+      "maquina": "BL-03",
+      "unidadesProduzidas": 805441,
+      "bolhasPorGolpe": 32,
+      "golpes": 25170,
+      "inicio": "2026-08-05",
+      "fonte": "SAP PP"
+    },
+    {
+      "op": "OP-4471137",
+      "produto": "Benegrip",
+      "formato": "BEN-4x4",
+      "maquina": "BL-02",
+      "unidadesProduzidas": 348803,
+      "bolhasPorGolpe": 16,
+      "golpes": 21800,
+      "inicio": "2026-07-22",
+      "fonte": "SAP PP"
+    },
+    {
+      "op": "OP-4471274",
+      "produto": "Neosaldina",
+      "formato": "NEO-4x8",
+      "maquina": "BL-03",
+      "unidadesProduzidas": 335572,
+      "bolhasPorGolpe": 32,
+      "golpes": 10487,
+      "inicio": "2026-07-11",
+      "fonte": "SAP PP"
+    },
+    {
+      "op": "OP-4471411",
+      "produto": "Neosaldina",
+      "formato": "NEO-4x8",
+      "maquina": "BL-02",
+      "unidadesProduzidas": 282958,
+      "bolhasPorGolpe": 32,
+      "golpes": 8842,
+      "inicio": "2026-07-24",
+      "fonte": "SAP PP"
+    },
+    {
+      "op": "OP-4471548",
+      "produto": "Benegrip",
+      "formato": "BEN-4x4",
+      "maquina": "BL-04",
+      "unidadesProduzidas": 626044,
+      "bolhasPorGolpe": 16,
+      "golpes": 39128,
+      "inicio": "2026-06-29",
+      "fonte": "SAP PP"
+    },
+    {
+      "op": "OP-4471685",
+      "produto": "Neosaldina",
+      "formato": "NEO-4x8",
+      "maquina": "BL-04",
+      "unidadesProduzidas": 600561,
+      "bolhasPorGolpe": 32,
+      "golpes": 18768,
+      "inicio": "2026-07-27",
+      "fonte": "SAP PP"
+    },
+    {
+      "op": "OP-4471822",
+      "produto": "Engov",
+      "formato": "ENG-2x10",
+      "maquina": "BL-02",
+      "unidadesProduzidas": 347002,
+      "bolhasPorGolpe": 20,
+      "golpes": 17350,
+      "inicio": "2026-07-29",
+      "fonte": "SAP PP"
+    },
+    {
+      "op": "OP-4471959",
+      "produto": "Benegrip",
+      "formato": "BEN-4x4",
+      "maquina": "BL-03",
+      "unidadesProduzidas": 222545,
+      "bolhasPorGolpe": 16,
+      "golpes": 13909,
+      "inicio": "2026-08-20",
+      "fonte": "SAP PP"
+    },
+    {
+      "op": "OP-4472096",
+      "produto": "Neosaldina",
+      "formato": "NEO-4x8",
+      "maquina": "BL-02",
+      "unidadesProduzidas": 782071,
+      "bolhasPorGolpe": 32,
+      "golpes": 24440,
+      "inicio": "2026-06-30",
+      "fonte": "SAP PP"
+    },
+    {
+      "op": "OP-4472233",
+      "produto": "Engov",
+      "formato": "ENG-2x10",
+      "maquina": "BL-03",
+      "unidadesProduzidas": 331711,
+      "bolhasPorGolpe": 20,
+      "golpes": 16586,
+      "inicio": "2026-06-26",
+      "fonte": "SAP PP"
+    },
+    {
+      "op": "OP-4472370",
+      "produto": "Neosaldina",
+      "formato": "NEO-4x8",
+      "maquina": "BL-06",
+      "unidadesProduzidas": 818282,
+      "bolhasPorGolpe": 32,
+      "golpes": 25571,
+      "inicio": "2026-06-29",
+      "fonte": "SAP PP"
+    },
+    {
+      "op": "OP-4472507",
+      "produto": "Engov",
+      "formato": "ENG-2x10",
+      "maquina": "BL-02",
+      "unidadesProduzidas": 712633,
+      "bolhasPorGolpe": 20,
+      "golpes": 35632,
+      "inicio": "2026-08-02",
+      "fonte": "SAP PP"
+    },
+    {
+      "op": "OP-4472644",
+      "produto": "Alivium",
+      "formato": "ALV-4x6",
+      "maquina": "BL-02",
+      "unidadesProduzidas": 625455,
+      "bolhasPorGolpe": 24,
+      "golpes": 26061,
+      "inicio": "2026-08-12",
+      "fonte": "SAP PP"
+    },
+    {
+      "op": "OP-4472781",
+      "produto": "Neosaldina",
+      "formato": "NEO-4x8",
+      "maquina": "BL-03",
+      "unidadesProduzidas": 652957,
+      "bolhasPorGolpe": 32,
+      "golpes": 20405,
+      "inicio": "2026-07-01",
+      "fonte": "SAP PP"
+    }
+  ],
+  "tradeoff": {
+    "itemSerial": "FS-0192",
+    "moeda": "BRL",
+    "custoRepor": {
+      "valor": 21000,
+      "detalhe": "reposição + 6 semanas de prazo do fornecedor"
+    },
+    "custoManterProximos100k": {
+      "valor": 38000,
+      "componentes": [
+        {
+          "rotulo": "Velocidade abaixo da nominal (−3%)",
+          "valor": 21400
+        },
+        {
+          "rotulo": "Refugo e retrabalho (+0,5 p.p.)",
+          "valor": 9200
+        },
+        {
+          "rotulo": "2 setups longos por reavaliação",
+          "valor": 7400
+        }
+      ]
+    },
+    "pontoOtimoGolpes": 845000,
+    "curva": [
+      {
+        "ciclos": 400000,
+        "manter": 4200,
+        "repor": 21000
+      },
+      {
+        "ciclos": 500000,
+        "manter": 7100,
+        "repor": 21000
+      },
+      {
+        "ciclos": 600000,
+        "manter": 11800,
+        "repor": 21000
+      },
+      {
+        "ciclos": 700000,
+        "manter": 18600,
+        "repor": 21000
+      },
+      {
+        "ciclos": 812400,
+        "manter": 29400,
+        "repor": 21000
+      },
+      {
+        "ciclos": 900000,
+        "manter": 44500,
+        "repor": 21000
+      },
+      {
+        "ciclos": 1000000,
+        "manter": 63200,
+        "repor": 21000
+      }
+    ],
+    "recomendacao": "substituir antes do próximo setup; acionar reserva e incluir na ficha de aquisição",
+    "aviso": "Valores ilustrativos. A hora de linha e o OEE de referência são placeholders do business case e serão substituídos pelo baseline auditado da Fase 1."
+  },
+  "fornecedores": [
+    {
+      "codigo": "P&F",
+      "nome": "Fornecedor P&F",
+      "familias": [
+        "PLACA_SELAGEM",
+        "FORMA_TERMOFORMAGEM"
+      ],
+      "precoMedio": 47500,
+      "prazoSemanas": 6,
+      "durabilidadeMediaGolpes": 890000,
+      "foraDeSpecNoRecebimento": 4.0,
+      "amostras": 18,
+      "nota": "Referência da família de selagem."
+    },
+    {
+      "codigo": "F&G",
+      "nome": "Fornecedor F&G",
+      "familias": [
+        "FACA_CORTE",
+        "GUIA_ALIMENTACAO"
+      ],
+      "precoMedio": 38900,
+      "prazoSemanas": 4,
+      "durabilidadeMediaGolpes": 612000,
+      "foraDeSpecNoRecebimento": 11.0,
+      "amostras": 15,
+      "nota": "Preço menor e prazo melhor, durabilidade observada 31% inferior — hipótese a confirmar com mais amostras na Fase 2."
+    }
+  ],
+  "fichasAquisicao": [
+    {
+      "id": "FA-2027-001",
+      "familia": "PLACA_SELAGEM",
+      "itemOrigem": "FS-0192",
+      "quantidade": 2,
+      "valorUnitario": 48200,
+      "exercicio": 2027,
+      "origem": "condição medida",
+      "status": "rascunho"
+    },
+    {
+      "id": "FA-2027-002",
+      "familia": "FACA_CORTE",
+      "itemOrigem": null,
+      "quantidade": 5,
+      "valorUnitario": 21800,
+      "exercicio": 2027,
+      "origem": "ciclos acima do limite",
+      "status": "rascunho"
+    },
+    {
+      "id": "FA-2027-003",
+      "familia": "FORMA_TERMOFORMAGEM",
+      "itemOrigem": null,
+      "quantidade": 3,
+      "valorUnitario": 38000,
+      "exercicio": 2027,
+      "origem": "condição medida",
+      "status": "rascunho"
+    },
+    {
+      "id": "FA-2027-004",
+      "familia": "PUNCAO_SUPERIOR",
+      "itemOrigem": null,
+      "quantidade": 24,
+      "valorUnitario": 4700,
+      "exercicio": 2027,
+      "origem": "tendência de desgaste",
+      "status": "rascunho"
+    }
+  ],
+  "plano3YP": [
+    {
+      "exercicio": 2027,
+      "familia": "PLACA_SELAGEM",
+      "quantidade": 2,
+      "valor": 96400
+    },
+    {
+      "exercicio": 2027,
+      "familia": "FACA_CORTE",
+      "quantidade": 5,
+      "valor": 109000
+    },
+    {
+      "exercicio": 2027,
+      "familia": "FORMA_TERMOFORMAGEM",
+      "quantidade": 3,
+      "valor": 114000
+    },
+    {
+      "exercicio": 2027,
+      "familia": "PUNCAO_SUPERIOR",
+      "quantidade": 24,
+      "valor": 112800
+    },
+    {
+      "exercicio": 2028,
+      "familia": "PLACA_SELAGEM",
+      "quantidade": 4,
+      "valor": 192800
+    },
+    {
+      "exercicio": 2028,
+      "familia": "FACA_CORTE",
+      "quantidade": 6,
+      "valor": 130800
+    },
+    {
+      "exercicio": 2028,
+      "familia": "FORMA_TERMOFORMAGEM",
+      "quantidade": 2,
+      "valor": 76000
+    },
+    {
+      "exercicio": 2028,
+      "familia": "PUNCAO_SUPERIOR",
+      "quantidade": 18,
+      "valor": 84600
+    },
+    {
+      "exercicio": 2029,
+      "familia": "PLACA_SELAGEM",
+      "quantidade": 3,
+      "valor": 144600
+    },
+    {
+      "exercicio": 2029,
+      "familia": "FACA_CORTE",
+      "quantidade": 8,
+      "valor": 174400
+    },
+    {
+      "exercicio": 2029,
+      "familia": "FORMA_TERMOFORMAGEM",
+      "quantidade": 4,
+      "valor": 152000
+    },
+    {
+      "exercicio": 2029,
+      "familia": "PUNCAO_SUPERIOR",
+      "quantidade": 20,
+      "valor": 94000
+    }
+  ],
+  "businessCase": {
+    "fonte": "Hypera_Business_Case_Ferramentaria_Memorial_v0.xlsx",
+    "moeda": "BRL",
+    "unidade": "MM/ano",
+    "aviso": "Hora de linha, OEE e tempo de setup são placeholders declarados pela Hypera como indisponíveis; serão substituídos pelo baseline auditado da Fase 1.",
+    "alavancas": [
+      {
+        "id": "oee_disp",
+        "rotulo": "OEE — Disponibilidade (setup mais curto)",
+        "fase": "F3",
+        "piloto": {
+          "conservador": 0.29,
+          "base": 0.43,
+          "otimista": 0.58
+        },
+        "parque": {
+          "conservador": 1.3,
+          "base": 1.94,
+          "otimista": 2.59
+        }
+      },
+      {
+        "id": "oee_perf",
+        "rotulo": "OEE — Performance (velocidade nominal)",
+        "fase": "F3",
+        "piloto": {
+          "conservador": 0.46,
+          "base": 0.86,
+          "otimista": 1.71
+        },
+        "parque": {
+          "conservador": 2.06,
+          "base": 3.86,
+          "otimista": 7.71
+        }
+      },
+      {
+        "id": "oee_qual",
+        "rotulo": "OEE — Qualidade (refugo e retrabalho)",
+        "fase": "F2–F3",
+        "piloto": {
+          "conservador": 0.11,
+          "base": 0.29,
+          "otimista": 0.51
+        },
+        "parque": {
+          "conservador": 0.51,
+          "base": 1.29,
+          "otimista": 2.31
+        }
+      },
+      {
+        "id": "capex",
+        "rotulo": "CAPEX — compra evitada por condição medida",
+        "fase": "F1 → F4",
+        "piloto": {
+          "conservador": 0.2,
+          "base": 0.3,
+          "otimista": 0.4
+        },
+        "parque": {
+          "conservador": 0.9,
+          "base": 1.35,
+          "otimista": 1.8
+        }
+      },
+      {
+        "id": "opex",
+        "rotulo": "OPEX — produtividade, reparo e capital de giro",
+        "fase": "F1–F3",
+        "piloto": {
+          "conservador": 0.17,
+          "base": 0.21,
+          "otimista": 0.24
+        },
+        "parque": {
+          "conservador": 0.77,
+          "base": 0.93,
+          "otimista": 1.1
+        }
+      }
+    ],
+    "totais": {
+      "piloto": {
+        "conservador": 1.23,
+        "base": 2.08,
+        "otimista": 3.45
+      },
+      "parque": {
+        "conservador": 5.53,
+        "base": 9.37,
+        "otimista": 15.51
+      }
+    },
+    "efeitoContabil": {
+      "piloto": 0.47,
+      "parque": 2.1,
+      "nota": "Informativo — vida útil contábil de 10 anos contra vida real de ~3 (CPC 27 / IAS 16)."
+    },
+    "capturaPorFase": [
+      {
+        "fase": "Fase 1",
+        "acumulado": 0.3,
+        "rotulo": "Baseline auditado + pacote CAPEX fev/27"
+      },
+      {
+        "fase": "Fase 2",
+        "acumulado": 0.59,
+        "rotulo": "Critério objetivo em rotina"
+      },
+      {
+        "fase": "Fase 3",
+        "acumulado": 1.87,
+        "rotulo": "OEE por ferramenta e trade-off"
+      },
+      {
+        "fase": "Fase 4",
+        "acumulado": 2.08,
+        "rotulo": "Escala e política de reposição"
+      }
+    ]
+  },
+  "formatos": [
+    {
+      "codigo": "NEO-4x8",
+      "produto": "Neosaldina",
+      "bolhasPorGolpe": 32,
+      "espessuraComprimidoMm": 3.0
+    },
+    {
+      "codigo": "ALV-4x6",
+      "produto": "Alivium",
+      "bolhasPorGolpe": 24,
+      "espessuraComprimidoMm": 4.0
+    },
+    {
+      "codigo": "ENG-2x10",
+      "produto": "Engov",
+      "bolhasPorGolpe": 20,
+      "espessuraComprimidoMm": 3.4
+    },
+    {
+      "codigo": "BEN-4x4",
+      "produto": "Benegrip",
+      "bolhasPorGolpe": 16,
+      "espessuraComprimidoMm": 3.2
+    }
+  ]
+}
