@@ -9,6 +9,7 @@ import { TelaGuardiao } from './telas/guardiao/TelaGuardiao'
 import { FichaItem } from './telas/guardiao/FichaItem'
 import { TelaVisao } from './telas/visao/TelaVisao'
 import { TelaCheckin } from './telas/checkin/TelaCheckin'
+import { TelaTradeOff } from './telas/tradeoff/TelaTradeOff'
 
 /*
  * HashRouter: a build precisa abrir por file:// e no GitHub Pages.
@@ -41,12 +42,7 @@ export function Aplicacao() {
           <Route path="/guardiao/item/:serial" element={<FichaItem />} />
           <Route path="/visao" element={<TelaVisao />} />
           <Route path="/checkin" element={<TelaCheckin />} />
-          <Route
-            path="/tradeoff"
-            element={
-              <TelaMarcador agenteId="tradeoff" nome="Trade-Off CAPEX × OPEX" prompt="Prompt 10" />
-            }
-          />
+          <Route path="/tradeoff" element={<TelaTradeOff />} />
           <Route
             path="/reposicao"
             element={
