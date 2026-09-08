@@ -290,6 +290,17 @@ export function valoresDistintos<C extends keyof Item>(campo: C): NonNullable<It
 }
 
 /**
+ * Rótulo legível de uma família, lido do familiaLabel dos próprios itens.
+ * As chaves (PLACA_SELAGEM) são identificadores; o rótulo é o que a Hypera
+ * chama a peça, com acento.
+ */
+const ROTULOS_FAMILIA = new Map(itens.map((i) => [i.familia, i.familiaLabel]))
+
+export function rotuloFamilia(familia: string): string {
+  return ROTULOS_FAMILIA.get(familia) ?? familia
+}
+
+/**
  * Resolve um caminho de asset do seed ("/assets/placa-FS-0192.jpg") para uma
  * referência relativa ao documento. Sem isso, a build aberta por file://
  * procuraria a foto na raiz do sistema de arquivos.
