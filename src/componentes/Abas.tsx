@@ -6,11 +6,14 @@ export function Abas<T extends string>({
   abas,
   ativa,
   aoTrocar,
+  compacta = false,
   className = '',
 }: {
   abas: { id: T; rotulo: string; contagem?: number }[]
   ativa: T
   aoTrocar: (id: T) => void
+  /** Para trilhas estreitas, como o painel de 380px da bancada. */
+  compacta?: boolean
   className?: string
 }) {
   return (
@@ -23,7 +26,8 @@ export function Abas<T extends string>({
           aria-selected={ativa === aba.id}
           onClick={() => aoTrocar(aba.id)}
           className={[
-            'border-b-2 px-2.5 py-1.5 text-xs font-semibold transition-colors',
+            'border-b-2 font-semibold transition-colors',
+            compacta ? 'px-1.5 py-1.5 text-[11px]' : 'px-2.5 py-1.5 text-xs',
             ativa === aba.id
               ? 'border-b-sinal text-sinal'
               : 'border-b-transparent text-texto-2 hover:text-texto',

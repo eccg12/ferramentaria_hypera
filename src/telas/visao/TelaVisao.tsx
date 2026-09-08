@@ -5,6 +5,7 @@ import { BotaoReiniciar } from '../../componentes/BotaoReiniciar'
 import { ChipFase } from '../../componentes/ChipFase'
 import { TituloTela } from '../../componentes/TituloTela'
 import { itemPorSerial, itens, pontoZero, SERIAL_HEROI, ultimaMedicao } from '../../dados/seletores'
+import type { Cota } from '../../dados/tipos'
 import { Bancada, type Camada } from './Bancada'
 import { BarraIdentificacao } from './BarraIdentificacao'
 import { CartaoCavidade } from './CartaoCavidade'
@@ -12,10 +13,11 @@ import { Abas } from '../../componentes/Abas'
 import { PainelComparar } from './PainelComparar'
 import { PainelFila } from './PainelFila'
 import { PainelHistorico } from './PainelHistorico'
+import { PainelRecebimento } from './PainelRecebimento'
 import { PainelVisao } from './PainelVisao'
 import { usarVarredura } from './usarVarredura'
 
-type Painel = 'leitura' | 'comparar' | 'historico' | 'fila'
+type Painel = 'leitura' | 'comparar' | 'historico' | 'fila' | 'recebimento'
 
 /**
  * Agente de Visão — o centro da demonstração.
@@ -32,6 +34,7 @@ export function TelaVisao() {
   const [achadoDestacado, setAchadoDestacado] = useState<string | null>(null)
   const [painel, setPainel] = useState<Painel>('leitura')
   const [cortina, setCortina] = useState(0.5)
+  const [cotasRecebimento, setCotasRecebimento] = useState<Cota[] | null>(null)
 
   const varredura = usarVarredura(medicao)
   const zero = pontoZero(serial)
@@ -55,7 +58,10 @@ export function TelaVisao() {
   // a rota também escolhe o painel: /visao?item=FS-0192&painel=historico
   const painelDaRota = busca.get('painel')
   useEffect(() => {
-    if (painelDaRota && ['leitura', 'comparar', 'historico', 'fila'].includes(painelDaRota)) {
+    if (
+      painelDaRota &&
+      ['leitura', 'comparar', 'historico', 'fila', 'recebimento'].includes(painelDaRota)
+    ) {
       setPainel(painelDaRota as Painel)
     }
     // o passo 6 do roteiro pede a decisão, que vive no fim do painel de leitura
@@ -70,6 +76,10 @@ export function TelaVisao() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [painelDaRota])
+
+  useEffect(() => {
+    if (painel !== 'recebimento') setCotasRecebimento(null)
+  }, [painel])
 
   function alternarCamada(c: Camada) {
     setCamadas((atual) => {
@@ -119,8 +129,12 @@ export function TelaVisao() {
           <div className="relative flex min-h-0 min-w-0 flex-1 flex-col">
             <Bancada
               medicao={medicao}
-              cotasVisiveis={varredura.cotasVisiveis}
-              achadosVisiveis={varredura.achadosVisiveis}
+              cotasVisiveis={
+                painel === 'recebimento' && cotasRecebimento
+                  ? cotasRecebimento
+                  : varredura.cotasVisiveis
+              }
+              achadosVisiveis={painel === 'recebimento' ? [] : varredura.achadosVisiveis}
               camadas={camadas}
               aoAlternarCamada={alternarCamada}
               selecao={selecao}
@@ -149,15 +163,19 @@ export function TelaVisao() {
                   { id: 'comparar', rotulo: 'Comparar' },
                   { id: 'historico', rotulo: 'Histórico' },
                   { id: 'fila', rotulo: 'Fila', contagem: itens.filter((i) => i.local === 'avaliacao').length },
+                  { id: 'recebimento', rotulo: 'Recebimento' },
                 ]}
                 ativa={painel}
                 aoTrocar={setPainel}
+                compacta
               />
             </div>
 
             <div className="flex min-h-0 flex-1 flex-col overflow-auto">
               {painel === 'fila' ? (
                 <PainelFila serialAtivo={serial} />
+              ) : painel === 'recebimento' ? (
+                <PainelRecebimento serial={serial} aoUsarCotas={setCotasRecebimento} />
               ) : !medicao ? (
                 <div className="px-4 py-3 text-xs text-texto-2">
                   Este item ainda não tem medição no rig. Ele entra na fila de avaliação do
