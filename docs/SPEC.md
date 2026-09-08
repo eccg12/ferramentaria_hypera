@@ -132,8 +132,19 @@ Blocos empilhados, separados por fio:
   ciclos, com os 5 pontos de `tendencia.pontos`, a reta de tendência, a linha de condenação em
   45% e a projeção pontilhada até ela. Abaixo do gráfico, em destaque:
   `Degrau 2 · extrapolação linear sobre 4 medições. Não é predição. O modelo preditivo é
-  entregável da Fase 4, com ~18 meses de base.` A vida remanescente (~60.000 golpes) aparece
-  **dentro** desse bloco, nunca solta.
+  entregável da Fase 4, com ~18 meses de base.` A vida remanescente aparece **dentro** desse
+  bloco, nunca solta.
+
+  > **Correção de 08/09/2026.** Este parágrafo dizia `~60.000 golpes` e o passo 5 do roteiro
+  > falava em `9% a cada 100 mil golpes`. Nenhum dos dois decorre dos pontos medidos: a série
+  > 0 / 12 / 23 / 33 / 41% contra 0 / 214.800 / 438.100 / 651.300 / 812.400 golpes produz
+  > **5,00% por 100 mil golpes** e cruza os 45% aos **887.310 golpes**, ou seja **~75.000
+  > golpes** de vida remanescente. Os 9% seriam 73% de perda aos 812.400 golpes, contra os 41%
+  > que a medição registra. Como a tela desenha a curva ao lado do número, a contradição
+  > apareceria na sala. `scripts/gerar_seed.py` passou a **derivar** inclinação, cruzamento e
+  > vida remanescente dos próprios pontos, e o painel lê essa conta em vez de refazer o ajuste.
+  > Os números do deck seguem intactos: 812.400 golpes, 41% de serrilha, cavidade 06 em 4,12
+  > contra 4,30 ± 0,10, cavidade 17 em 4,28, planicidade 0,06 contra 0,10 e 94% de concordância.
 - **Fila** — as demais peças aguardando avaliação, incluindo as duas peças de PoC das outras
   áreas (punção de compressão e tela de granulador), para mostrar que o conceito atravessa as
   três áreas.

@@ -121,6 +121,12 @@ export function usarVarredura(medicao?: Medicao) {
 
   return {
     fase,
+    /**
+     * Revela o resultado sem a passada. As abas de comparação e histórico
+     * falam da medição que já existe: entrar nelas direto por link não pode
+     * deixar a bancada em branco.
+     */
+    revelarSemAnimacao: concluir,
     progresso: fase === 'correndo' ? progresso : null,
     cotasVisiveis,
     achadosVisiveis,

@@ -133,9 +133,12 @@ Histórico: linha do tempo das 5 medições e gráfico de desgaste da serrilha c
 os pontos de tendencia.pontos, reta de tendência, linha de condenação em 45% e projeção
 pontilhada até o cruzamento.
 
-Este é o ponto mais delicado do produto. A vida remanescente de ~60.000 golpes só pode
-aparecer dentro deste bloco, acompanhada do aviso de tendencia.avisoDegrau, com o chip
-"Degrau 2". Não crie nenhum outro lugar no produto onde esse número apareça solto.
+Este é o ponto mais delicado do produto. A vida remanescente só pode aparecer dentro deste
+bloco, acompanhada do aviso de tendencia.avisoDegrau, com o chip "Degrau 2". Não crie nenhum
+outro lugar no produto onde esse número apareça solto.
+
+[Correção de 08/09/2026: o valor citado aqui era ~60.000 golpes. Os pontos medidos produzem
+~75.000. Ver a nota na seção 1.5 de docs/SPEC.md.]
 
 Fila: as demais peças aguardando avaliação, incluindo as duas peças de PoC de compressão e
 manipulação.

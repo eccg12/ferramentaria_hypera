@@ -54,6 +54,13 @@ interface Props {
   /** Progresso da varredura, 0..1. Acima de 0 desenha a linha que atravessa. */
   varredura?: number | null
   planicidade?: number
+  /**
+   * Posição da cortina de comparação, 0..1. À esquerda dela fica o ponto zero,
+   * à direita a captura atual. Nulo esconde a cortina.
+   */
+  cortina?: number | null
+  /** Cotas do ponto zero, para colorir as cavidades do lado da peça nova. */
+  cotasZero?: Cota[]
 }
 
 export function Bancada({
@@ -67,6 +74,8 @@ export function Bancada({
   achadoDestacado,
   varredura,
   planicidade,
+  cortina,
+  cotasZero,
 }: Props) {
   const { container, vista, arrastando, reenquadrar, aplicarZoom, houveArrasto, manipuladores } =
     usarZoom()
@@ -77,6 +86,14 @@ export function Bancada({
     for (const c of cotasVisiveis) m.set(c.alvo, c)
     return m
   }, [cotasVisiveis])
+
+  const porAlvoZero = useMemo(() => {
+    const m = new Map<string, Cota>()
+    for (const c of cotasZero ?? []) m.set(c.alvo, c)
+    return m
+  }, [cotasZero])
+
+  const temCortina = cortina !== null && cortina !== undefined
 
   const mapa = useMemo(() => {
     if (!camadas.has('mapa') || !medicao) return null
@@ -218,7 +235,9 @@ export function Bancada({
               {/* cavidades */}
               {camadas.has('cavidades') &&
                 geometria.cavidades.map((c) => {
-                  const cota = porAlvo.get(c.id)
+                  // à esquerda da cortina vale a peça nova; à direita, a captura atual
+                  const doLadoZero = temCortina && c.cx < (cortina as number)
+                  const cota = doLadoZero ? porAlvoZero.get(c.id) : porAlvo.get(c.id)
                   if (!cota) return null
                   const selecionada = selecao.includes(c.id)
                   const destacada = alvosDestacados.has(c.id)
@@ -281,6 +300,45 @@ export function Bancada({
 
               {/* régua */}
               {camadas.has('regua') && <Regua planicidade={planicidade} />}
+
+              {/* cortina de comparação */}
+              {temCortina && (
+                <g>
+                  <line
+                    x1={(cortina as number) * W}
+                    x2={(cortina as number) * W}
+                    y1={0}
+                    y2={H}
+                    stroke="var(--sinal)"
+                    strokeWidth={4}
+                  />
+                  <text
+                    x={(cortina as number) * W - 14}
+                    y={30}
+                    textAnchor="end"
+                    fontSize={24}
+                    fontFamily="IBM Plex Mono, monospace"
+                    fill="var(--dimensional)"
+                    stroke="var(--aco-900)"
+                    strokeWidth={5}
+                    paintOrder="stroke"
+                  >
+                    peça nova
+                  </text>
+                  <text
+                    x={(cortina as number) * W + 14}
+                    y={30}
+                    fontSize={24}
+                    fontFamily="IBM Plex Mono, monospace"
+                    fill="var(--atencao)"
+                    stroke="var(--aco-900)"
+                    strokeWidth={5}
+                    paintOrder="stroke"
+                  >
+                    agora
+                  </text>
+                </g>
+              )}
 
               {/* a passada da varredura */}
               {varredura !== null && varredura !== undefined && varredura < 1 && (

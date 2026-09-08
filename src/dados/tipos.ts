@@ -217,9 +217,14 @@ export interface Tendencia {
   degrau: number
   metodo: string
   avisoDegrau: string
+  /** Derivada dos pontos por mínimos quadrados, nunca digitada. */
   inclinacaoPorCemMilGolpes: number
   unidadeInclinacao: string
+  interceptoPercentual: number
   limiteCondenacao: number
+  /** Ciclos em que a reta cruza o limite de condenação. */
+  cruzamentoGolpes: number
+  notaDerivacao: string
   /** Só pode aparecer dentro do bloco de tendência, com o aviso de degrau 2. */
   vidaRemanescenteGolpes: number
   pontos: PontoTendencia[]

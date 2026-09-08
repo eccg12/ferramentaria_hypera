@@ -156,7 +156,7 @@
       "rota": "/visao?item=FS-0192&painel=historico",
       "perfil": "lider",
       "titulo": "Contra a peça nova e contra ela mesma",
-      "fala": "Quatro medições desde dezembro. A tendência é de 9% a cada 100 mil golpes. Isso é degrau 2 — extrapolação, não predição."
+      "fala": "Quatro medições desde dezembro. A tendência é de 5% a cada 100 mil golpes. Isso é degrau 2 — extrapolação, não predição."
     },
     {
       "passo": 6,
@@ -3834,10 +3834,13 @@
     "degrau": 2,
     "metodo": "extrapolação linear do desgaste medido contra ciclos acumulados",
     "avisoDegrau": "Degrau 2 da escada analítica. Não é predição: é tendência sobre 4 medições. O modelo preditivo (degrau 4) exige ~18 meses de base histórica e é entregável da Fase 4.",
-    "inclinacaoPorCemMilGolpes": 9.0,
+    "inclinacaoPorCemMilGolpes": 5.0,
     "unidadeInclinacao": "% de perda de altura de pico por 100 mil golpes",
+    "interceptoPercentual": 0.634,
     "limiteCondenacao": 45.0,
-    "vidaRemanescenteGolpes": 60000,
+    "cruzamentoGolpes": 887310,
+    "vidaRemanescenteGolpes": 75000,
+    "notaDerivacao": "Inclinação, cruzamento e vida remanescente são calculados dos pontos por mínimos quadrados. Não são digitados: a curva da tela e os números do painel vêm da mesma conta.",
     "pontos": [
       {
         "ciclos": 0,

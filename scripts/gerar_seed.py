@@ -203,22 +203,48 @@ medicoes = [
                    profundidades=prof_atual),
 ]
 
+PONTOS_TENDENCIA = [
+    {"ciclos": 0, "desgaste": 0.0},
+    {"ciclos": 214800, "desgaste": 12.0},
+    {"ciclos": 438100, "desgaste": 23.0},
+    {"ciclos": 651300, "desgaste": 33.0},
+    {"ciclos": 812400, "desgaste": 41.0},
+]
+LIMITE_CONDENACAO = 45.0
+
+
+def _reta_minimos_quadrados(pontos):
+    """Inclinação e intercepto da reta que os próprios pontos produzem."""
+    n = len(pontos)
+    sx = sum(p["ciclos"] for p in pontos)
+    sy = sum(p["desgaste"] for p in pontos)
+    sxy = sum(p["ciclos"] * p["desgaste"] for p in pontos)
+    sxx = sum(p["ciclos"] ** 2 for p in pontos)
+    a = (n * sxy - sx * sy) / (n * sxx - sx * sx)
+    b = (sy - a * sx) / n
+    return a, b
+
+
+# A inclinação e a vida remanescente são DERIVADAS dos pontos medidos, nunca
+# digitadas. Um número que discorde da própria curva na tela é o tipo de coisa
+# que a sala percebe em dois segundos — e vira expectativa contratual no Gate 1.
+_a, _b = _reta_minimos_quadrados(PONTOS_TENDENCIA)
+_cruzamento = (LIMITE_CONDENACAO - _b) / _a
+_ultimo = PONTOS_TENDENCIA[-1]["ciclos"]
+
 tendencia = {
     "itemSerial": "FS-0192",
     "degrau": 2,
     "metodo": "extrapolação linear do desgaste medido contra ciclos acumulados",
     "avisoDegrau": "Degrau 2 da escada analítica. Não é predição: é tendência sobre 4 medições. O modelo preditivo (degrau 4) exige ~18 meses de base histórica e é entregável da Fase 4.",
-    "inclinacaoPorCemMilGolpes": 9.0,
+    "inclinacaoPorCemMilGolpes": round(_a * 1e5, 2),
     "unidadeInclinacao": "% de perda de altura de pico por 100 mil golpes",
-    "limiteCondenacao": 45.0,
-    "vidaRemanescenteGolpes": 60000,
-    "pontos": [
-        {"ciclos": 0, "desgaste": 0.0},
-        {"ciclos": 214800, "desgaste": 12.0},
-        {"ciclos": 438100, "desgaste": 23.0},
-        {"ciclos": 651300, "desgaste": 33.0},
-        {"ciclos": 812400, "desgaste": 41.0},
-    ],
+    "interceptoPercentual": round(_b, 3),
+    "limiteCondenacao": LIMITE_CONDENACAO,
+    "cruzamentoGolpes": round(_cruzamento),
+    "vidaRemanescenteGolpes": round((_cruzamento - _ultimo) / 1000) * 1000,
+    "notaDerivacao": "Inclinação, cruzamento e vida remanescente são calculados dos pontos por mínimos quadrados. Não são digitados: a curva da tela e os números do painel vêm da mesma conta.",
+    "pontos": PONTOS_TENDENCIA,
 }
 
 # ---------------------------------------------------------------- itens
@@ -583,7 +609,7 @@ roteiro = [
      "fala": "Classificação e metrologia são dois problemas diferentes. A cor vem da tolerância, não da opinião: a cavidade 06 está em 4,12 contra 4,30 ± 0,10."},
     {"passo": 5, "rota": "/visao?item=FS-0192&painel=historico", "perfil": "lider",
      "titulo": "Contra a peça nova e contra ela mesma",
-     "fala": "Quatro medições desde dezembro. A tendência é de 9% a cada 100 mil golpes. Isso é degrau 2 — extrapolação, não predição."},
+     "fala": "Quatro medições desde dezembro. A tendência é de %s%% a cada 100 mil golpes. Isso é degrau 2 — extrapolação, não predição." % ("%.0f" % tendencia["inclinacaoPorCemMilGolpes"])},
     {"passo": 6, "rota": "/visao?item=FS-0192&painel=decisao", "perfil": "lider",
      "titulo": "Quem decide é o líder, e fica registrado",
      "fala": "O sistema recomenda substituir antes do próximo setup. A disposição da peça é humana, com nome, hora e trilha — é o que sustenta o desenho de apoio à decisão."},
