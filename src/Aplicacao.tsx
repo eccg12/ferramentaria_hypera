@@ -4,6 +4,7 @@ import { Marcador } from './componentes/Marcador'
 import { BotaoReiniciar } from './componentes/BotaoReiniciar'
 import { TituloTela } from './componentes/TituloTela'
 import { ProvedorApp } from './estado/contexto'
+import { TelaGuardiao } from './telas/guardiao/TelaGuardiao'
 
 /*
  * HashRouter: a build precisa abrir por file:// e no GitHub Pages.
@@ -26,10 +27,7 @@ export function Aplicacao() {
       <HashRouter>
         <Routes>
           <Route path="/" element={<Navigate to="/guardiao" replace />} />
-          <Route
-            path="/guardiao"
-            element={<TelaMarcador agenteId="guardiao" nome="Guardião de Dados" prompt="Prompt 3" />}
-          />
+          <Route path="/guardiao" element={<TelaGuardiao />} />
           <Route
             path="/visao"
             element={<TelaMarcador agenteId="visao" nome="Agente de Visão" prompt="Prompt 4" />}

@@ -82,3 +82,34 @@ export function capitalizar(v: string | null | undefined): string {
   if (!v) return '—'
   return v.charAt(0).toUpperCase() + v.slice(1)
 }
+
+/*
+ * As chaves do seed são identificadores estáveis, sem acento. A interface é em
+ * português do Brasil: estes mapas fazem a tradução na apresentação, sem tocar
+ * nos dados.
+ */
+export const ROTULO_AREA: Record<string, string> = {
+  manipulacao: 'Manipulação',
+  compressao: 'Compressão',
+  embalagem: 'Embalagem',
+}
+
+export const ROTULO_SUBAREA: Record<string, string> = {
+  formacao: 'Formação',
+  alimentacao: 'Alimentação',
+  selagem: 'Selagem',
+  corte: 'Corte',
+}
+
+export const ROTULO_LOCAL: Record<string, string> = {
+  armario: 'Armário',
+  maquina: 'Máquina',
+  avaliacao: 'Avaliação',
+  reparo: 'Reparo',
+}
+
+/** Rótulo legível de qualquer uma das chaves acima; cai no capitalizar se não conhecer. */
+export function rotulo(chave: string | null | undefined): string {
+  if (!chave) return '—'
+  return ROTULO_AREA[chave] ?? ROTULO_SUBAREA[chave] ?? ROTULO_LOCAL[chave] ?? capitalizar(chave)
+}
