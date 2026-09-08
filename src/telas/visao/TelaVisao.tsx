@@ -1,14 +1,15 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Casca } from '../../casca/Casca'
 import { BotaoReiniciar } from '../../componentes/BotaoReiniciar'
 import { ChipFase } from '../../componentes/ChipFase'
-import { Legenda } from '../../componentes/Legenda'
 import { TituloTela } from '../../componentes/TituloTela'
 import { itemPorSerial, SERIAL_HEROI, ultimaMedicao } from '../../dados/seletores'
 import { Bancada, type Camada } from './Bancada'
 import { BarraIdentificacao } from './BarraIdentificacao'
 import { CartaoCavidade } from './CartaoCavidade'
+import { PainelVisao } from './PainelVisao'
+import { usarVarredura } from './usarVarredura'
 
 /**
  * Agente de Visão — o centro da demonstração.
@@ -22,9 +23,16 @@ export function TelaVisao() {
 
   const [camadas, setCamadas] = useState<Set<Camada>>(new Set(['cavidades', 'achados']))
   const [selecao, setSelecao] = useState<string[]>([])
+  const [achadoDestacado, setAchadoDestacado] = useState<string | null>(null)
 
-  const cotas = useMemo(() => medicao?.cotas ?? [], [medicao])
-  const achados = useMemo(() => medicao?.achados ?? [], [medicao])
+  const varredura = usarVarredura(medicao)
+
+  // a rota pode pedir a varredura sozinha: /visao?item=FS-0192&acao=varrer
+  const acao = busca.get('acao')
+  useEffect(() => {
+    if (acao === 'varrer') varredura.avaliar()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [acao, serial])
 
   function alternarCamada(c: Camada) {
     setCamadas((atual) => {
@@ -74,18 +82,20 @@ export function TelaVisao() {
           <div className="relative flex min-h-0 min-w-0 flex-1 flex-col">
             <Bancada
               medicao={medicao}
-              cotasVisiveis={cotas}
-              achadosVisiveis={achados}
+              cotasVisiveis={varredura.cotasVisiveis}
+              achadosVisiveis={varredura.achadosVisiveis}
               camadas={camadas}
               aoAlternarCamada={alternarCamada}
               selecao={selecao}
               aoSelecionar={selecionar}
+              achadoDestacado={achadoDestacado}
+              varredura={varredura.progresso}
               planicidade={medicao?.planicidade.valor}
             />
             <CartaoCavidade
               serial={serial}
               selecao={selecao}
-              cotas={cotas}
+              cotas={varredura.cotasVisiveis}
               aoFechar={() => setSelecao([])}
               aoRemover={(id) => setSelecao((a) => a.filter((x) => x !== id))}
             />
@@ -93,16 +103,23 @@ export function TelaVisao() {
 
           {/* painel de leitura: 380px fixos */}
           <aside className="flex w-[380px] shrink-0 flex-col overflow-auto border-l border-linha bg-aco-800/40">
-            <div className="px-4 py-3">
-              <h2 className="rotulo">Painel de leitura</h2>
-              <p className="mt-2 text-xs text-texto-2">
-                A varredura, o veredito, os achados e o bloco de decisão entram no Prompt 5.
-                As camadas da bancada já leem as cotas desta medição.
-              </p>
-            </div>
-            <div className="mt-auto border-t border-linha px-4 py-3">
-              <Legenda />
-            </div>
+            {medicao ? (
+              <PainelVisao
+                item={item}
+                medicao={medicao}
+                fase={varredura.fase}
+                achadosVisiveis={varredura.achadosVisiveis}
+                blocosRevelados={varredura.blocosRevelados}
+                aoAvaliar={varredura.avaliar}
+                achadoDestacado={achadoDestacado}
+                aoDestacarAchado={setAchadoDestacado}
+              />
+            ) : (
+              <div className="px-4 py-3 text-xs text-texto-2">
+                Este item ainda não tem medição no rig. Ele entra na fila de avaliação do
+                Guardião.
+              </div>
+            )}
           </aside>
         </div>
       </div>
