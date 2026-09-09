@@ -91,15 +91,27 @@ O selo `Ambiente demonstrativo · dados fictícios` fica no cabeçalho de toda r
 3. **Não existe aprovação automática.** Toda disposição de peça tem autor, hora e observação, e
    achado com score abaixo de 0,50 aparece como *avaliar manualmente*, nunca como veredito.
 
-## O que falta no repositório
+## A fotografia
 
-`public/assets/placa-FS-0192.jpg` (2000×1132) não está versionado, por ser material do cliente.
-Coloque o arquivo com exatamente esse nome e a bancada passa a funcionar sem alteração de
-código. Enquanto ele não estiver lá, a tela `/visao` desenha a grade das 32 cavidades sobre um
-painel neutro e diz o que fazer. Nenhuma imagem sintética entra no lugar da foto.
+`public/assets/placa-FS-0192.jpg` (2000×1132) está no repositório. É a única coisa real do
+mockup. Se ela sumir, a tela `/visao` desenha a grade das 32 cavidades sobre um painel neutro e
+diz qual arquivo falta — nenhuma imagem sintética entra no lugar da foto.
 
-`docs/verificacao-grade.jpg` é a referência de conferência da grade, com as cavidades numeradas
-e coloridas pela medição atual.
+Trocar a foto exige manter 2000×1132: é a proporção que faz as marcações continuarem coladas na
+peça. Conferido sobre a foto atual, medindo o perfil radial de cada cavidade: o centro coincide
+com o do seed e a borda da bolha fica entre 63 e 86 px do centro, com o raio do seed (75 px)
+dentro dessa faixa.
+
+## Publicar como página
+
+```bash
+npm run artifact     # build + embute a foto e gera dist/ferramon-artifact.html
+```
+
+O Artifact é um único arquivo HTML, sem pasta ao lado, então o caminho relativo da fotografia
+não resolveria e a bancada cairia no painel de foto ausente. `scripts/artifact.mjs` embute a
+imagem como `data:` URI no próprio caminho que o seed declara. O arquivo gerado tem ~1,9 MB e
+não faz nenhum pedido de rede.
 
 ## Estrutura
 

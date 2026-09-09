@@ -1,16 +1,15 @@
 # Assets da bancada
 
-Este diretório precisa de um arquivo:
-
 - `placa-FS-0192.jpg` — a fotografia real da placa de selagem FS-0192, 2000×1132.
 
-A foto é a única coisa real do mockup. Ela não está versionada aqui porque é
-material do cliente; coloque o arquivo neste diretório com exatamente esse nome
-e a bancada de visão passa a funcionar sem nenhuma alteração de código.
+É a única coisa real do mockup. Anotação, contorno, régua e mapa de calor são
+camadas de análise desenhadas por cima; nada é pintado sobre o metal.
 
-Enquanto o arquivo não estiver presente, a tela `/visao` mostra a grade de
-cavidades e serrilhas sobre um fundo neutro, com a instrução do que fazer.
-Nenhuma imagem sintética é usada no lugar da foto: `CLAUDE.md` proíbe.
+As coordenadas das 32 cavidades e das 16 serrilhas estão em `geometria`, no
+seed, em unidades normalizadas sobre esta imagem. Se a foto for trocada, ela
+precisa manter 2000×1132 — a proporção é o que faz as marcações continuarem
+coladas na peça.
 
-A referência de conferência da grade é `docs/verificacao-grade.jpg`, com as 32
-cavidades numeradas e coloridas pela medição atual.
+Verificado sobre esta foto: o centro das cavidades coincide com o do seed, e a
+borda da bolha fica entre 63 e 86 px do centro, com o raio do seed (75 px)
+dentro dessa faixa.
